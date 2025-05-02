@@ -1,8 +1,11 @@
+
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import React, { useState, useRef, useCallback } from "react";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -21,10 +24,15 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"; // Import Select components
-import type { BlogPost } from "@/types";
-import { Loader2 } from "lucide-react";
+} from "@/components/ui/select";
+import { Loader2, UploadCloud, X } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import type { BlogPost, BlogTopic } from "@/types";
+import { ALL_TOPICS, getTopicInfo } from "@/lib/topics"; // Import topic definitions
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
 // Define Zod schema for validation
 const formSchema = z.object({
@@ -37,12 +45,32 @@ const formSchema = z.object({
   content: z.string().min(20, {
     message: "Content must be at least 20 characters.",
   }),
-  topic: z.enum(['tech', 'classic', 'food']).optional(), // Added topic field validation
-  author: z.string().optional(),
-  tags: z.string().optional(), // Comma-separated string for simplicity
-  imageUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')), // Allow empty string
+  topic: z.enum(ALL_TOPICS, { required_error: "Please select a topic." }), // Make topic required
+  author: z.string().optional(), // Author will be handled by auth later
+  tags: z.string().min(1, { message: "Please enter at least one tag."}), // Make tags required, validate as string first
+  imageUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')), // Existing URL field
+  imageFile: z
+    .custom<File | null>((file) => file instanceof File || file === null, "Invalid file type")
+    .refine(
+        (file) => !file || file.size <= MAX_FILE_SIZE,
+        `Max file size is 5MB.`
+    )
+    .refine(
+        (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
+        "Only .jpg, .jpeg, .png, .webp and .gif formats are supported."
+    ).optional(), // File upload field
   imageAlt: z.string().optional(),
+}).refine(data => !!data.imageUrl || !!data.imageFile, {
+    message: "Either an Image URL or an uploaded image is required.",
+    path: ["imageFile"], // Attach error to imageFile field for better UX
+}).refine(data => !(data.imageUrl && data.imageFile), {
+    message: "Please provide either an Image URL or upload an image, not both.",
+    path: ["imageFile"],
+}).refine(data => (data.imageUrl || data.imageFile) ? !!data.imageAlt : true, {
+    message: "Image Alt Text is required if an image is provided.",
+    path: ["imageAlt"],
 });
+
 
 type PostFormValues = z.infer<typeof formSchema>;
 
@@ -54,6 +82,10 @@ interface PostFormProps {
 }
 
 export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostFormProps) {
+  const { toast } = useToast();
+  const [imagePreview, setImagePreview] = useState<string | null>(initialData?.imageUrl || null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<PostFormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -61,9 +93,10 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
       excerpt: initialData?.excerpt || "",
       content: initialData?.content || "",
       topic: initialData?.topic || undefined, // Set initial topic
-      author: initialData?.author || "",
+      author: initialData?.author || "", // Will be replaced by auth user later
       tags: initialData?.tags?.join(', ') || "",
       imageUrl: initialData?.imageUrl || "",
+      imageFile: null, // Start with no file selected
       imageAlt: initialData?.imageAlt || "",
     },
   });
@@ -72,10 +105,110 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
   const cardDescription = mode === 'create' ? "Fill in the details for your new blog post." : "Update the details of this blog post.";
   const submitButtonText = mode === 'create' ? "Create Post" : "Save Changes";
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > MAX_FILE_SIZE) {
+          form.setError("imageFile", { type: "manual", message: `Max file size is 5MB.` });
+          setImagePreview(null); // Clear preview if file too large
+          form.setValue("imageFile", null); // Clear file value in form
+          return;
+       }
+       if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
+          form.setError("imageFile", { type: "manual", message: "Only .jpg, .jpeg, .png, .webp and .gif formats are supported." });
+          setImagePreview(null); // Clear preview if wrong type
+          form.setValue("imageFile", null); // Clear file value in form
+          return;
+       }
+
+       // Clear URL field if a file is selected
+       form.setValue("imageUrl", "");
+       form.setValue("imageFile", file);
+       form.clearErrors("imageFile"); // Clear errors if file is valid
+       form.clearErrors("imageUrl");
+
+       const reader = new FileReader();
+       reader.onloadend = () => {
+         setImagePreview(reader.result as string);
+       };
+       reader.readAsDataURL(file);
+    } else {
+        // Handle case where file selection is cancelled
+        // Only clear preview if there wasn't an initial URL
+        if (!initialData?.imageUrl) {
+             setImagePreview(null);
+        }
+        form.setValue("imageFile", null);
+    }
+  };
+
+  const handleRemoveImage = useCallback(() => {
+      setImagePreview(null);
+      form.setValue("imageFile", null);
+      form.setValue("imageUrl", ""); // Also clear URL field
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Reset file input
+      }
+      form.clearErrors("imageFile");
+      form.clearErrors("imageUrl");
+      // Re-validate as image is now missing
+      form.trigger(["imageFile", "imageUrl", "imageAlt"]);
+  }, [form, initialData?.imageUrl]);
+
+   // Handle changes to the Image URL field
+   const handleImageUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const url = event.target.value;
+        form.setValue("imageUrl", url);
+        if (url) {
+            // Clear file field if URL is entered
+            setImagePreview(url);
+            form.setValue("imageFile", null);
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
+            form.clearErrors("imageFile");
+            // Validate URL format
+            form.trigger("imageUrl");
+        } else {
+            // If URL is cleared, potentially show file preview if one exists
+            const imageFile = form.getValues("imageFile");
+            if (imageFile) {
+                 const reader = new FileReader();
+                 reader.onloadend = () => {
+                   setImagePreview(reader.result as string);
+                 };
+                 reader.readAsDataURL(imageFile);
+            } else {
+               setImagePreview(null);
+            }
+            // Re-validate as URL is now empty
+             form.trigger(["imageFile", "imageUrl", "imageAlt"]);
+        }
+    };
+
+   // Pre-process form data before submitting
+   const processAndSubmit = (values: PostFormValues) => {
+     console.log("Raw form values:", values);
+
+     // Ensure tags are processed correctly
+     const processedValues = {
+       ...values,
+       tags: values.tags.split(',').map(tag => tag.trim()).filter(Boolean)
+     };
+
+     console.log("Processed form values:", processedValues);
+
+     // If imageFile is present, we'll handle its upload in the action
+     // If imageUrl is present, it's used directly
+
+     onSubmit(processedValues as any); // Pass processed data to the actual submit handler
+   };
+
+
   return (
     <Card>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+        <form onSubmit={form.handleSubmit(processAndSubmit)}>
           <CardHeader>
             <CardTitle>{cardTitle}</CardTitle>
             <CardDescription>{cardDescription}</CardDescription>
@@ -99,21 +232,29 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
               name="topic"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Topic</FormLabel>
+                  <FormLabel>Topic *</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a topic (optional)" />
+                        <SelectValue placeholder="Select a topic" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="tech">Tech</SelectItem>
-                      <SelectItem value="classic">Classic</SelectItem>
-                      <SelectItem value="food">Food</SelectItem>
+                      {ALL_TOPICS.map(topicKey => {
+                        const topicInfo = getTopicInfo(topicKey);
+                        return topicInfo ? (
+                          <SelectItem key={topicKey} value={topicKey}>
+                            <div className="flex items-center gap-2">
+                              <topicInfo.icon className="h-4 w-4 text-muted-foreground" />
+                              {topicInfo.label}
+                            </div>
+                          </SelectItem>
+                        ) : null;
+                      })}
                     </SelectContent>
                   </Select>
                   <FormDescription>
-                    Categorize your post. This affects filtering.
+                    Categorize your post. This affects filtering and styling.
                   </FormDescription>
                   <FormMessage />
                 </FormItem>
@@ -160,8 +301,105 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
                 </FormItem>
               )}
             />
+            {/* Image Section */}
+             <FormField
+                control={form.control}
+                name="imageFile" // Control the imageFile field now
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Hero Image *</FormLabel>
+                    <FormDescription>Upload an image or provide an external URL.</FormDescription>
+                    <div className="space-y-4">
+                       {/* Image Preview */}
+                        {imagePreview && (
+                            <div className="relative group w-full aspect-video rounded-md overflow-hidden border">
+                                <Image
+                                    src={imagePreview}
+                                    alt={form.getValues("imageAlt") || "Image preview"}
+                                    fill
+                                    style={{ objectFit: 'cover' }}
+                                    sizes="(max-width: 768px) 100vw, 50vw"
+                                />
+                                <Button
+                                    type="button"
+                                    variant="destructive"
+                                    size="icon"
+                                    className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity z-10 h-8 w-8"
+                                    onClick={handleRemoveImage}
+                                    title="Remove Image"
+                                >
+                                    <X className="h-4 w-4" />
+                                    <span className="sr-only">Remove Image</span>
+                                </Button>
+                             </div>
+                         )}
+
+                        {/* File Upload Input */}
+                         <FormControl>
+                           <div className="flex flex-col sm:flex-row gap-4 items-start">
+                             <Button
+                                type="button"
+                                variant="outline"
+                                onClick={() => fileInputRef.current?.click()}
+                                disabled={!!form.watch("imageUrl")} // Disable if URL is entered
+                                className="w-full sm:w-auto"
+                              >
+                                <UploadCloud className="mr-2 h-4 w-4" />
+                                {form.watch("imageFile") ? "Change Image" : "Upload Image"}
+                              </Button>
+                              <input
+                                type="file"
+                                ref={fileInputRef}
+                                accept={ACCEPTED_IMAGE_TYPES.join(",")}
+                                onChange={handleFileChange}
+                                className="hidden"
+                                disabled={!!form.watch("imageUrl")}
+                              />
+
+                              <span className="text-muted-foreground text-sm mt-2 sm:mt-0">or</span>
+
+                             {/* Image URL Input */}
+                              <Input
+                                type="url"
+                                placeholder="Enter Image URL"
+                                value={form.watch("imageUrl")}
+                                onChange={handleImageUrlChange}
+                                disabled={!!form.watch("imageFile")} // Disable if file is uploaded
+                                className="flex-grow"
+                              />
+                            </div>
+                          </FormControl>
+                    </div>
+                    <FormMessage />
+                 </FormItem>
+                )}
+              />
+
+            {/* Image Alt Text */}
+             <FormField
+                control={form.control}
+                name="imageAlt"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Image Alt Text *</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Concise description of the image"
+                        {...field}
+                        disabled={!form.watch("imageUrl") && !form.watch("imageFile")} // Disable if no image source
+                      />
+                    </FormControl>
+                    <FormDescription>
+                      Required for accessibility if an image is provided.
+                    </FormDescription>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <FormField
+              {/* Author field will be removed/handled by auth later */}
+              {/* <FormField
                 control={form.control}
                 name="author"
                 render={({ field }) => (
@@ -173,55 +411,26 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 control={form.control}
                 name="tags"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Tags (Optional)</FormLabel>
+                    <FormLabel>Tags *</FormLabel>
                     <FormControl>
                       <Input placeholder="react, nextjs, webdev" {...field} />
                     </FormControl>
                     <FormDescription>
-                      Comma-separated list of tags.
+                      Comma-separated list of tags (e.g., tech, tutorial, review). Required.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
               />
             </div>
-             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                <FormField
-                  control={form.control}
-                  name="imageUrl"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image URL (Optional)</FormLabel>
-                      <FormControl>
-                        <Input type="url" placeholder="https://example.com/image.jpg" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="imageAlt"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Image Alt Text (Optional)</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Description of the image" {...field} />
-                      </FormControl>
-                      <FormDescription>
-                        Required if Image URL is provided, for accessibility.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-             </div>
+
+
           </CardContent>
           <CardFooter>
              <Button type="submit" disabled={isSubmitting}>

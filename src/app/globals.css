@@ -4,7 +4,7 @@
 
 @layer base {
   /* Default (Tech Theme) - Light */
-  :root {
+  :root, .theme-tech {
     --background: 220 15% 98%; /* Lighter cool grey */
     --foreground: 220 10% 10%; /* Dark cool grey */
     --card: 220 15% 100%;
@@ -32,7 +32,7 @@
   }
 
   /* Tech Theme - Dark */
-  .dark:root {
+  .dark:root, .dark .theme-tech {
     --background: 220 15% 5%; /* Very dark cool grey */
     --foreground: 220 10% 95%; /* Light cool grey */
     --card: 220 15% 10%;
@@ -150,6 +150,247 @@
     --ring: 15 75% 65%;
     --body-font: var(--font-sans);
   }
+
+  /* Health Theme - Light */
+  .theme-health {
+    --background: 160 50% 97%; /* Very light teal/mint */
+    --foreground: 160 30% 20%; /* Dark teal */
+    --card: 160 50% 100%;
+    --card-foreground: 160 30% 20%;
+    --popover: 160 50% 100%;
+    --popover-foreground: 160 30% 20%;
+    --primary: 170 70% 45%; /* Teal */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 160 40% 93%;
+    --secondary-foreground: 160 30% 30%;
+    --muted: 160 40% 93%;
+    --muted-foreground: 160 20% 50%;
+    --accent: 170 60% 95%; /* Lighter teal accent */
+    --accent-foreground: 170 70% 35%; /* Darker teal */
+    --destructive: 0 75% 55%; /* Standard red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 30% 88%;
+    --input: 160 30% 88%;
+    --ring: 170 70% 45%;
+    --body-font: var(--font-sans);
+  }
+
+  /* Health Theme - Dark */
+  .dark .theme-health {
+    --background: 160 30% 10%; /* Dark teal */
+    --foreground: 160 50% 93%; /* Light mint */
+    --card: 160 30% 15%;
+    --card-foreground: 160 50% 93%;
+    --popover: 160 30% 15%;
+    --popover-foreground: 160 50% 93%;
+    --primary: 170 65% 60%; /* Lighter teal */
+    --primary-foreground: 160 30% 5%;
+    --secondary: 160 25% 20%;
+    --secondary-foreground: 160 50% 90%;
+    --muted: 160 25% 20%;
+    --muted-foreground: 160 30% 65%;
+    --accent: 170 50% 25%; /* Darker teal accent */
+    --accent-foreground: 170 65% 85%; /* Lighter teal text */
+    --destructive: 0 60% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 160 25% 25%;
+    --input: 160 25% 25%;
+    --ring: 170 65% 60%;
+    --body-font: var(--font-sans);
+  }
+
+   /* Travel Theme - Light */
+  .theme-travel {
+    --background: 200 40% 98%; /* Light sky blue */
+    --foreground: 200 30% 15%; /* Dark navy */
+    --card: 200 40% 100%;
+    --card-foreground: 200 30% 15%;
+    --popover: 200 40% 100%;
+    --popover-foreground: 200 30% 15%;
+    --primary: 210 80% 55%; /* Bright blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 200 30% 94%;
+    --secondary-foreground: 200 25% 25%;
+    --muted: 200 30% 94%;
+    --muted-foreground: 200 15% 50%;
+    --accent: 210 70% 96%; /* Very light blue accent */
+    --accent-foreground: 210 80% 40%; /* Darker bright blue */
+    --destructive: 350 75% 55%; /* Coral red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 200 25% 88%;
+    --input: 200 25% 88%;
+    --ring: 210 80% 55%;
+    --body-font: var(--font-sans);
+  }
+
+  /* Travel Theme - Dark */
+  .dark .theme-travel {
+    --background: 200 30% 8%; /* Dark navy */
+    --foreground: 200 40% 95%; /* Light sky blue */
+    --card: 200 30% 12%;
+    --card-foreground: 200 40% 95%;
+    --popover: 200 30% 12%;
+    --popover-foreground: 200 40% 95%;
+    --primary: 210 75% 65%; /* Lighter bright blue */
+    --primary-foreground: 200 30% 5%;
+    --secondary: 200 25% 18%;
+    --secondary-foreground: 200 40% 90%;
+    --muted: 200 25% 18%;
+    --muted-foreground: 200 20% 65%;
+    --accent: 210 60% 22%; /* Darker blue accent */
+    --accent-foreground: 210 75% 85%; /* Lighter blue text */
+    --destructive: 350 60% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 200 20% 25%;
+    --input: 200 20% 25%;
+    --ring: 210 75% 65%;
+    --body-font: var(--font-sans);
+  }
+
+  /* Cooking Theme - Light */
+  .theme-cooking {
+    --background: 30 70% 96%; /* Light peach */
+    --foreground: 15 50% 25%; /* Warm brown */
+    --card: 30 70% 100%;
+    --card-foreground: 15 50% 25%;
+    --popover: 30 70% 100%;
+    --popover-foreground: 15 50% 25%;
+    --primary: 35 85% 50%; /* Rich terracotta */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 30 60% 92%;
+    --secondary-foreground: 15 40% 35%;
+    --muted: 30 60% 92%;
+    --muted-foreground: 15 30% 55%;
+    --accent: 35 75% 94%; /* Lighter terracotta accent */
+    --accent-foreground: 35 85% 35%; /* Darker terracotta */
+    --destructive: 5 70% 55%; /* Warm red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 50% 86%;
+    --input: 30 50% 86%;
+    --ring: 35 85% 50%;
+    --body-font: var(--font-serif);
+  }
+
+  /* Cooking Theme - Dark */
+  .dark .theme-cooking {
+    --background: 15 50% 12%; /* Warm dark brown */
+    --foreground: 30 60% 92%; /* Light peach */
+    --card: 15 50% 18%;
+    --card-foreground: 30 60% 92%;
+    --popover: 15 50% 18%;
+    --popover-foreground: 30 60% 92%;
+    --primary: 35 75% 65%; /* Lighter terracotta */
+    --primary-foreground: 15 50% 8%;
+    --secondary: 15 40% 25%;
+    --secondary-foreground: 30 60% 88%;
+    --muted: 15 40% 25%;
+    --muted-foreground: 20 35% 60%;
+    --accent: 35 65% 30%; /* Darker terracotta accent */
+    --accent-foreground: 35 75% 85%; /* Lighter terracotta text */
+    --destructive: 5 55% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 15 40% 30%;
+    --input: 15 40% 30%;
+    --ring: 35 75% 65%;
+    --body-font: var(--font-serif);
+  }
+
+  /* Guides Theme - Light */
+  .theme-guides {
+    --background: 50 25% 97%; /* Off-white / light grey */
+    --foreground: 210 10% 30%; /* Slate grey */
+    --card: 50 25% 100%;
+    --card-foreground: 210 10% 30%;
+    --popover: 50 25% 100%;
+    --popover-foreground: 210 10% 30%;
+    --primary: 190 60% 40%; /* Steel blue */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 15% 94%;
+    --secondary-foreground: 210 10% 40%;
+    --muted: 210 15% 94%;
+    --muted-foreground: 210 8% 55%;
+    --accent: 190 50% 95%; /* Light steel blue accent */
+    --accent-foreground: 190 60% 30%; /* Darker steel blue */
+    --destructive: 0 65% 50%; /* Muted red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 10% 88%;
+    --input: 210 10% 88%;
+    --ring: 190 60% 40%;
+    --body-font: var(--font-sans);
+  }
+
+  /* Guides Theme - Dark */
+  .dark .theme-guides {
+    --background: 210 10% 10%; /* Dark slate grey */
+    --foreground: 50 15% 92%; /* Light grey */
+    --card: 210 10% 15%;
+    --card-foreground: 50 15% 92%;
+    --popover: 210 10% 15%;
+    --popover-foreground: 50 15% 92%;
+    --primary: 190 55% 55%; /* Lighter steel blue */
+    --primary-foreground: 210 10% 5%;
+    --secondary: 210 8% 20%;
+    --secondary-foreground: 50 15% 88%;
+    --muted: 210 8% 20%;
+    --muted-foreground: 210 10% 60%;
+    --accent: 190 45% 25%; /* Darker steel blue accent */
+    --accent-foreground: 190 55% 80%; /* Lighter steel blue text */
+    --destructive: 0 50% 40%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 210 8% 30%;
+    --input: 210 8% 30%;
+    --ring: 190 55% 55%;
+    --body-font: var(--font-sans);
+  }
+
+  /* Mature Theme - Light */
+  .theme-mature {
+    --background: 0 0% 98%; /* Almost white */
+    --foreground: 0 0% 10%; /* Near black */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 0 0% 30%; /* Dark grey */
+    --primary-foreground: 0 0% 95%; /* Light grey */
+    --secondary: 0 0% 94%;
+    --secondary-foreground: 0 0% 20%;
+    --muted: 0 0% 94%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 96%; /* Very light grey accent */
+    --accent-foreground: 0 0% 25%; /* Slightly darker grey */
+    --destructive: 0 84.2% 60.2%; /* Standard destructive red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 88%;
+    --input: 0 0% 88%;
+    --ring: 0 0% 50%; /* Medium grey ring */
+    --body-font: var(--font-mono);
+  }
+
+  /* Mature Theme - Dark */
+  .dark .theme-mature {
+    --background: 0 0% 5%; /* Near black */
+    --foreground: 0 0% 95%; /* Light grey */
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 95%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 0 0% 95%;
+    --primary: 0 0% 70%; /* Medium grey */
+    --primary-foreground: 0 0% 10%; /* Near black */
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+    --accent: 0 0% 12%; /* Darker grey accent */
+    --accent-foreground: 0 0% 80%; /* Lighter grey text */
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 20%;
+    --input: 0 0% 20%;
+    --ring: 0 0% 60%; /* Lighter grey ring */
+    --body-font: var(--font-mono);
+  }
+
 }
 
 @layer base {
@@ -159,6 +400,7 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--body-font); /* Apply the theme-specific font */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition for theme changes */
   }
 }
 
