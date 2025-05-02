@@ -343,6 +343,55 @@
     --body-font: var(--font-sans);
   }
 
+  /* Gaming Theme - Light */
+  .theme-gaming {
+    --background: 270 15% 97%; /* Light cool purple */
+    --foreground: 270 10% 15%; /* Dark purple */
+    --card: 270 15% 100%;
+    --card-foreground: 270 10% 15%;
+    --popover: 270 15% 100%;
+    --popover-foreground: 270 10% 15%;
+    --primary: 270 70% 55%; /* Vibrant purple */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 10% 93%;
+    --secondary-foreground: 270 10% 25%;
+    --muted: 270 10% 93%;
+    --muted-foreground: 270 5% 50%;
+    --accent: 270 60% 96%; /* Lighter purple accent */
+    --accent-foreground: 270 70% 40%; /* Darker purple */
+    --destructive: 330 75% 55%; /* Neon pink/red */
+    --destructive-foreground: 0 0% 98%;
+    --border: 270 10% 88%;
+    --input: 270 10% 88%;
+    --ring: 270 70% 55%;
+    --body-font: var(--font-mono); /* Gaming uses Mono */
+  }
+
+  /* Gaming Theme - Dark */
+  .dark .theme-gaming {
+    --background: 270 15% 8%; /* Very dark purple */
+    --foreground: 270 10% 95%; /* Light cool purple */
+    --card: 270 15% 12%;
+    --card-foreground: 270 10% 95%;
+    --popover: 270 15% 12%;
+    --popover-foreground: 270 10% 95%;
+    --primary: 270 65% 65%; /* Lighter vibrant purple */
+    --primary-foreground: 270 10% 5%;
+    --secondary: 270 10% 18%;
+    --secondary-foreground: 270 10% 90%;
+    --muted: 270 10% 18%;
+    --muted-foreground: 270 5% 65%;
+    --accent: 270 50% 22%; /* Darker purple accent */
+    --accent-foreground: 270 65% 85%; /* Lighter purple text */
+    --destructive: 330 60% 45%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 270 10% 25%;
+    --input: 270 10% 25%;
+    --ring: 270 65% 65%;
+    --body-font: var(--font-mono);
+  }
+
+
   /* Mature Theme - Light */
   .theme-mature {
     --background: 0 0% 98%; /* Almost white */

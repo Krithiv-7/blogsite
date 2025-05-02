@@ -13,7 +13,7 @@ const postActionSchema = z.object({
   title: z.string().min(2),
   excerpt: z.string().min(10).max(200),
   content: z.string().min(20),
-  topic: z.enum(ALL_TOPICS, { required_error: "Topic is required." }), // Topic is required
+  topic: z.enum(ALL_TOPICS, { required_error: "Topic is required." }), // Topic is required and includes 'gaming'
   author: z.string().optional(), // Will be set server-side based on logged-in user
   tags: z.string().min(1, { message: "At least one tag is required." }), // Tags required (as comma-separated string initially)
   imageUrl: z.string().url().optional().or(z.literal('')),

@@ -156,6 +156,27 @@ Research reviews and compare models within your budget and use case.
     imageAlt: 'Various laptops displayed on a table',
     topic: 'guides', // Required
   },
+  // --- Gaming ---
+  {
+    slug: 'indie-game-gems-2024',
+    title: 'Must-Play Indie Game Gems of 2024',
+    date: '2024-07-16',
+    excerpt: 'Discover hidden indie game treasures you might have missed this year.',
+    content: `
+## Top Picks So Far
+*   **Pixel Pioneers:** A charming retro-style RPG with deep crafting.
+*   **Neon Nights:** Fast-paced cyberpunk action platformer with a killer soundtrack.
+*   **Whispering Woods:** A narrative-driven adventure with stunning hand-drawn art.
+*   **Cosmic Cartographers:** Relaxing space exploration and trading simulator.
+
+Support indie developers and find your next favorite game!
+    `,
+    author: 'Gamer Nexus',
+    tags: ['Gaming', 'Indie Games', 'PC Gaming', 'Console Gaming', 'Review'], // Required
+    imageUrl: 'https://picsum.photos/seed/indiegames/800/400',
+    imageAlt: 'Abstract pixel art landscape representing indie games',
+    topic: 'gaming', // Required
+  },
    // --- Mature ---
   {
     slug: 'philosophy-of-existence',

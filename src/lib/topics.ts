@@ -1,7 +1,7 @@
 
 import type { BlogTopic, TopicConfig } from '@/types';
 import {
-  Terminal, Palette, Utensils, HeartPulse, Plane, ChefHat, BookMarked, AlertTriangle
+  Terminal, Palette, Utensils, HeartPulse, Plane, ChefHat, BookMarked, AlertTriangle, Gamepad2 // Added Gamepad2
 } from 'lucide-react';
 
 // Define the configuration for each topic
@@ -13,6 +13,7 @@ export const TOPICS: Record<BlogTopic, TopicConfig> = {
   travel: { label: 'Travel', icon: Plane, className: 'theme-travel' },
   cooking: { label: 'Cooking', icon: ChefHat, className: 'theme-cooking' },
   guides: { label: 'Guides', icon: BookMarked, className: 'theme-guides' },
+  gaming: { label: 'Gaming', icon: Gamepad2, className: 'theme-gaming' }, // Added Gaming
   mature: { label: 'Mature', icon: AlertTriangle, className: 'theme-mature' },
 };
 
@@ -34,3 +35,4 @@ export const getTopicFromClassName = (className: string): BlogTopic | null => {
     }
     return null; // Default to tech if no specific class found
 };
+

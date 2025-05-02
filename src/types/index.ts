@@ -1,7 +1,7 @@
 
 import type { LucideIcon } from 'lucide-react';
 
-export type BlogTopic = 'tech' | 'classic' | 'food' | 'health' | 'travel' | 'cooking' | 'guides' | 'mature';
+export type BlogTopic = 'tech' | 'classic' | 'food' | 'health' | 'travel' | 'cooking' | 'guides' | 'mature' | 'gaming'; // Added 'gaming'
 
 export interface BlogPost {
   slug: string;
@@ -24,5 +24,5 @@ export interface TopicConfig {
     label: string;
     icon: LucideIcon;
     className: string; // Class to apply to body/container
-    primaryHue?: number; // Optional HSL hue for theme customization
 }
+
