@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Post</title> <!-- Title will be set dynamically -->
+    <link rel="stylesheet" href="css/style.css">
+     <!-- Add Inter, Lora, Inconsolata fonts (example using Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@400;700&family=Inter:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Include a Markdown library (e.g., Marked.js via CDN) -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Include date-fns via CDN for date formatting -->
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@3.6.0/cdn.min.js"></script>
+     <script>
+      // Make date-fns available globally
+      var dateFns = datefns;
+    </script>
+</head>
+<body> <!-- Theme class will be applied by theme.js -->
+     <header class="site-header">
+        <div class="container">
+            <a href="/" class="logo">
+                 <!-- Book Icon SVG -->
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide-icon"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                 <span>Blogify</span>
+            </a>
+             <nav class="main-nav">
+                 <!-- Theme Switcher Placeholder (Copied from index.html for consistency) -->
+                 <div class="theme-switcher-container">
+                    <!-- Light/System Toggle -->
+                    <div class="dropdown">
+                        <button id="appearance-toggle" class="icon-button" title="Change Appearance">
+                            <svg id="sun-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                            <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                        </button>
+                        <div class="dropdown-content" id="appearance-menu">
+                            <div class="dropdown-label">Appearance</div>
+                            <a href="#" data-theme-mode="light">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                                Light
+                            </a>
+                            <a href="#" data-theme-mode="system">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                                System
+                            </a>
+                        </div>
+                    </div>
+                     <!-- Topic Style Dropdown -->
+                    <div class="dropdown">
+                         <button id="topic-toggle" class="icon-button" title="Change Style">
+                             <svg id="topic-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+                         </button>
+                         <div class="dropdown-content" id="topic-menu">
+                              <div class="dropdown-label">Select Style (Filters Posts)</div>
+                              <div id="topic-radio-group">
+                                  <!-- Topics will be populated by JS -->
+                              </div>
+                         </div>
+                    </div>
+                 </div>
+                 <!-- Admin link removed -->
+            </nav>
+        </div>
+    </header>
+
+    <main class="container content-area">
+        <article id="post-content" class="post-detail">
+            <!-- Post details will be loaded here -->
+            <p>Loading post...</p>
+        </article>
+         <!-- Back Button -->
+         <div class="back-button-container">
+            <a href="/" class="button button-ghost">
+                <!-- ArrowLeft Icon -->
+                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                Back to posts
+            </a>
+         </div>
+    </main>
+
+     <footer class="site-footer">
+        <div class="container">
+            © <span id="current-year"></span> Blogify. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Mature Content Dialog (Copied for consistency if needed, but theme logic handles it) -->
+     <div id="mature-confirm-dialog" class="dialog-overlay" style="display: none;">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                 <h2 class="dialog-title">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="dialog-icon-title"><path d="m21.73 18-8-14a2 2 0 0 0-3.46 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                    Mature Content Warning
+                </h2>
+            </div>
+            <p class="dialog-description">
+               The "Mature" style filters posts that may contain sensitive or adult themes. Selecting this style implies you are comfortable viewing such content. Are you sure you want to proceed?
+            </p>
+            <div class="dialog-footer">
+                <button id="cancel-mature-button" class="button button-outline">Cancel</button>
+                <button id="confirm-mature-button" class="button">Proceed</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/topics.js"></script>
+    <script src="js/posts.js"></script> <!-- Contains post data -->
+    <script src="js/theme.js"></script>
+    <script src="js/post-detail.js"></script> <!-- Specific JS for post page -->
+</body>
+</html>

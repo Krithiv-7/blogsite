@@ -1,0 +1,1219 @@
+/* Basic Reset & Box Sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Theme Variables - Light Mode Defaults (Tech Theme) */
+:root, .theme-tech {
+    --background-hsl: 220 15% 98%;
+    --foreground-hsl: 220 10% 10%;
+    --card-hsl: 220 15% 100%;
+    --card-foreground-hsl: 220 10% 10%;
+    --popover-hsl: 220 15% 100%;
+    --popover-foreground-hsl: 220 10% 10%;
+    --primary-hsl: 220 70% 50%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 220 10% 94%;
+    --secondary-foreground-hsl: 220 10% 20%;
+    --muted-hsl: 220 10% 94%;
+    --muted-foreground-hsl: 220 5% 45%;
+    --accent-hsl: 220 60% 96%;
+    --accent-foreground-hsl: 220 70% 30%;
+    --destructive-hsl: 0 84.2% 60.2%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 220 10% 88%;
+    --input-hsl: 220 10% 88%;
+    --ring-hsl: 220 70% 50%;
+    --radius: 0.5rem;
+    --font-sans: 'Inter', sans-serif;
+    --font-serif: 'Georgia', serif;
+    --font-mono: 'Menlo', 'Monaco', 'Courier New', monospace;
+    --body-font: var(--font-mono); /* Tech theme uses Mono */
+}
+
+/* Dark Mode Defaults (Tech Theme) */
+.dark, .dark .theme-tech {
+    --background-hsl: 220 15% 5%;
+    --foreground-hsl: 220 10% 95%;
+    --card-hsl: 220 15% 10%;
+    --card-foreground-hsl: 220 10% 95%;
+    --popover-hsl: 220 15% 10%;
+    --popover-foreground-hsl: 220 10% 95%;
+    --primary-hsl: 220 70% 60%;
+    --primary-foreground-hsl: 220 10% 5%;
+    --secondary-hsl: 220 10% 15%;
+    --secondary-foreground-hsl: 220 10% 90%;
+    --muted-hsl: 220 10% 15%;
+    --muted-foreground-hsl: 220 5% 65%;
+    --accent-hsl: 220 60% 12%;
+    --accent-foreground-hsl: 220 70% 80%;
+    --destructive-hsl: 0 62.8% 30.6%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 220 10% 20%;
+    --input-hsl: 220 10% 20%;
+    --ring-hsl: 220 70% 60%;
+    --body-font: var(--font-mono);
+}
+
+/* Classic Theme - Light */
+.theme-classic {
+    --background-hsl: 35 30% 96%;
+    --foreground-hsl: 35 15% 15%;
+    --card-hsl: 35 30% 100%;
+    --card-foreground-hsl: 35 15% 15%;
+    --popover-hsl: 35 30% 100%;
+    --popover-foreground-hsl: 35 15% 15%;
+    --primary-hsl: 35 60% 45%;
+    --primary-foreground-hsl: 35 30% 98%;
+    --secondary-hsl: 35 20% 92%;
+    --secondary-foreground-hsl: 35 15% 25%;
+    --muted-hsl: 35 20% 92%;
+    --muted-foreground-hsl: 35 10% 50%;
+    --accent-hsl: 35 50% 94%;
+    --accent-foreground-hsl: 35 60% 35%;
+    --destructive-hsl: 0 70% 50%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 35 15% 85%;
+    --input-hsl: 35 15% 85%;
+    --ring-hsl: 35 60% 45%;
+    --body-font: var(--font-serif);
+}
+
+/* Classic Theme - Dark */
+.dark .theme-classic {
+    --background-hsl: 35 15% 10%;
+    --foreground-hsl: 35 30% 90%;
+    --card-hsl: 35 15% 15%;
+    --card-foreground-hsl: 35 30% 90%;
+    --popover-hsl: 35 15% 15%;
+    --popover-foreground-hsl: 35 30% 90%;
+    --primary-hsl: 35 50% 60%;
+    --primary-foreground-hsl: 35 15% 10%;
+    --secondary-hsl: 35 10% 20%;
+    --secondary-foreground-hsl: 35 30% 85%;
+    --muted-hsl: 35 10% 20%;
+    --muted-foreground-hsl: 35 15% 60%;
+    --accent-hsl: 35 40% 25%;
+    --accent-foreground-hsl: 35 50% 80%;
+    --destructive-hsl: 0 50% 40%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 35 10% 30%;
+    --input-hsl: 35 10% 30%;
+    --ring-hsl: 35 50% 60%;
+    --body-font: var(--font-serif);
+}
+
+/* Food Theme - Light */
+.theme-food {
+    --background-hsl: 40 60% 97%;
+    --foreground-hsl: 20 40% 20%;
+    --card-hsl: 0 0% 100%;
+    --card-foreground-hsl: 20 40% 20%;
+    --popover-hsl: 0 0% 100%;
+    --popover-foreground-hsl: 20 40% 20%;
+    --primary-hsl: 10 80% 55%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 30 50% 93%;
+    --secondary-foreground-hsl: 20 30% 30%;
+    --muted-hsl: 30 50% 93%;
+    --muted-foreground-hsl: 20 20% 50%;
+    --accent-hsl: 10 70% 95%;
+    --accent-foreground-hsl: 10 80% 40%;
+    --destructive-hsl: 0 80% 60%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 30 40% 88%;
+    --input-hsl: 30 40% 88%;
+    --ring-hsl: 10 80% 55%;
+    --body-font: var(--font-sans);
+}
+
+/* Food Theme - Dark */
+.dark .theme-food {
+    --background-hsl: 20 40% 10%;
+    --foreground-hsl: 40 50% 93%;
+    --card-hsl: 20 40% 15%;
+    --card-foreground-hsl: 40 50% 93%;
+    --popover-hsl: 20 40% 15%;
+    --popover-foreground-hsl: 40 50% 93%;
+    --primary-hsl: 15 75% 65%;
+    --primary-foreground-hsl: 20 40% 5%;
+    --secondary-hsl: 20 30% 20%;
+    --secondary-foreground-hsl: 40 50% 90%;
+    --muted-hsl: 20 30% 20%;
+    --muted-foreground-hsl: 30 30% 65%;
+    --accent-hsl: 10 70% 25%;
+    --accent-foreground-hsl: 15 75% 85%;
+    --destructive-hsl: 0 60% 45%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 20 30% 25%;
+    --input-hsl: 20 30% 25%;
+    --ring-hsl: 15 75% 65%;
+    --body-font: var(--font-sans);
+}
+
+/* Health Theme - Light */
+.theme-health {
+    --background-hsl: 160 50% 97%;
+    --foreground-hsl: 160 30% 20%;
+    --card-hsl: 160 50% 100%;
+    --card-foreground-hsl: 160 30% 20%;
+    --popover-hsl: 160 50% 100%;
+    --popover-foreground-hsl: 160 30% 20%;
+    --primary-hsl: 170 70% 45%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 160 40% 93%;
+    --secondary-foreground-hsl: 160 30% 30%;
+    --muted-hsl: 160 40% 93%;
+    --muted-foreground-hsl: 160 20% 50%;
+    --accent-hsl: 170 60% 95%;
+    --accent-foreground-hsl: 170 70% 35%;
+    --destructive-hsl: 0 75% 55%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 160 30% 88%;
+    --input-hsl: 160 30% 88%;
+    --ring-hsl: 170 70% 45%;
+    --body-font: var(--font-sans);
+}
+
+/* Health Theme - Dark */
+.dark .theme-health {
+    --background-hsl: 160 30% 10%;
+    --foreground-hsl: 160 50% 93%;
+    --card-hsl: 160 30% 15%;
+    --card-foreground-hsl: 160 50% 93%;
+    --popover-hsl: 160 30% 15%;
+    --popover-foreground-hsl: 160 50% 93%;
+    --primary-hsl: 170 65% 60%;
+    --primary-foreground-hsl: 160 30% 5%;
+    --secondary-hsl: 160 25% 20%;
+    --secondary-foreground-hsl: 160 50% 90%;
+    --muted-hsl: 160 25% 20%;
+    --muted-foreground-hsl: 160 30% 65%;
+    --accent-hsl: 170 50% 25%;
+    --accent-foreground-hsl: 170 65% 85%;
+    --destructive-hsl: 0 60% 45%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 160 25% 25%;
+    --input-hsl: 160 25% 25%;
+    --ring-hsl: 170 65% 60%;
+    --body-font: var(--font-sans);
+}
+
+/* Travel Theme - Light */
+.theme-travel {
+    --background-hsl: 200 40% 98%;
+    --foreground-hsl: 200 30% 15%;
+    --card-hsl: 200 40% 100%;
+    --card-foreground-hsl: 200 30% 15%;
+    --popover-hsl: 200 40% 100%;
+    --popover-foreground-hsl: 200 30% 15%;
+    --primary-hsl: 210 80% 55%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 200 30% 94%;
+    --secondary-foreground-hsl: 200 25% 25%;
+    --muted-hsl: 200 30% 94%;
+    --muted-foreground-hsl: 200 15% 50%;
+    --accent-hsl: 210 70% 96%;
+    --accent-foreground-hsl: 210 80% 40%;
+    --destructive-hsl: 350 75% 55%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 200 25% 88%;
+    --input-hsl: 200 25% 88%;
+    --ring-hsl: 210 80% 55%;
+    --body-font: var(--font-sans);
+}
+
+/* Travel Theme - Dark */
+.dark .theme-travel {
+    --background-hsl: 200 30% 8%;
+    --foreground-hsl: 200 40% 95%;
+    --card-hsl: 200 30% 12%;
+    --card-foreground-hsl: 200 40% 95%;
+    --popover-hsl: 200 30% 12%;
+    --popover-foreground-hsl: 200 40% 95%;
+    --primary-hsl: 210 75% 65%;
+    --primary-foreground-hsl: 200 30% 5%;
+    --secondary-hsl: 200 25% 18%;
+    --secondary-foreground-hsl: 200 40% 90%;
+    --muted-hsl: 200 25% 18%;
+    --muted-foreground-hsl: 200 20% 65%;
+    --accent-hsl: 210 60% 22%;
+    --accent-foreground-hsl: 210 75% 85%;
+    --destructive-hsl: 350 60% 45%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 200 20% 25%;
+    --input-hsl: 200 20% 25%;
+    --ring-hsl: 210 75% 65%;
+    --body-font: var(--font-sans);
+}
+
+/* Cooking Theme - Light */
+.theme-cooking {
+    --background-hsl: 30 70% 96%;
+    --foreground-hsl: 15 50% 25%;
+    --card-hsl: 30 70% 100%;
+    --card-foreground-hsl: 15 50% 25%;
+    --popover-hsl: 30 70% 100%;
+    --popover-foreground-hsl: 15 50% 25%;
+    --primary-hsl: 35 85% 50%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 30 60% 92%;
+    --secondary-foreground-hsl: 15 40% 35%;
+    --muted-hsl: 30 60% 92%;
+    --muted-foreground-hsl: 15 30% 55%;
+    --accent-hsl: 35 75% 94%;
+    --accent-foreground-hsl: 35 85% 35%;
+    --destructive-hsl: 5 70% 55%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 30 50% 86%;
+    --input-hsl: 30 50% 86%;
+    --ring-hsl: 35 85% 50%;
+    --body-font: var(--font-serif);
+}
+
+/* Cooking Theme - Dark */
+.dark .theme-cooking {
+    --background-hsl: 15 50% 12%;
+    --foreground-hsl: 30 60% 92%;
+    --card-hsl: 15 50% 18%;
+    --card-foreground-hsl: 30 60% 92%;
+    --popover-hsl: 15 50% 18%;
+    --popover-foreground-hsl: 30 60% 92%;
+    --primary-hsl: 35 75% 65%;
+    --primary-foreground-hsl: 15 50% 8%;
+    --secondary-hsl: 15 40% 25%;
+    --secondary-foreground-hsl: 30 60% 88%;
+    --muted-hsl: 15 40% 25%;
+    --muted-foreground-hsl: 20 35% 60%;
+    --accent-hsl: 35 65% 30%;
+    --accent-foreground-hsl: 35 75% 85%;
+    --destructive-hsl: 5 55% 45%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 15 40% 30%;
+    --input-hsl: 15 40% 30%;
+    --ring-hsl: 35 75% 65%;
+    --body-font: var(--font-serif);
+}
+
+/* Guides Theme - Light */
+.theme-guides {
+    --background-hsl: 50 25% 97%;
+    --foreground-hsl: 210 10% 30%;
+    --card-hsl: 50 25% 100%;
+    --card-foreground-hsl: 210 10% 30%;
+    --popover-hsl: 50 25% 100%;
+    --popover-foreground-hsl: 210 10% 30%;
+    --primary-hsl: 190 60% 40%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 210 15% 94%;
+    --secondary-foreground-hsl: 210 10% 40%;
+    --muted-hsl: 210 15% 94%;
+    --muted-foreground-hsl: 210 8% 55%;
+    --accent-hsl: 190 50% 95%;
+    --accent-foreground-hsl: 190 60% 30%;
+    --destructive-hsl: 0 65% 50%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 210 10% 88%;
+    --input-hsl: 210 10% 88%;
+    --ring-hsl: 190 60% 40%;
+    --body-font: var(--font-sans);
+}
+
+/* Guides Theme - Dark */
+.dark .theme-guides {
+    --background-hsl: 210 10% 10%;
+    --foreground-hsl: 50 15% 92%;
+    --card-hsl: 210 10% 15%;
+    --card-foreground-hsl: 50 15% 92%;
+    --popover-hsl: 210 10% 15%;
+    --popover-foreground-hsl: 50 15% 92%;
+    --primary-hsl: 190 55% 55%;
+    --primary-foreground-hsl: 210 10% 5%;
+    --secondary-hsl: 210 8% 20%;
+    --secondary-foreground-hsl: 50 15% 88%;
+    --muted-hsl: 210 8% 20%;
+    --muted-foreground-hsl: 210 10% 60%;
+    --accent-hsl: 190 45% 25%;
+    --accent-foreground-hsl: 190 55% 80%;
+    --destructive-hsl: 0 50% 40%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 210 8% 30%;
+    --input-hsl: 210 8% 30%;
+    --ring-hsl: 190 55% 55%;
+    --body-font: var(--font-sans);
+}
+
+/* Gaming Theme - Light */
+.theme-gaming {
+    --background-hsl: 270 15% 97%;
+    --foreground-hsl: 270 10% 15%;
+    --card-hsl: 270 15% 100%;
+    --card-foreground-hsl: 270 10% 15%;
+    --popover-hsl: 270 15% 100%;
+    --popover-foreground-hsl: 270 10% 15%;
+    --primary-hsl: 270 70% 55%;
+    --primary-foreground-hsl: 0 0% 100%;
+    --secondary-hsl: 270 10% 93%;
+    --secondary-foreground-hsl: 270 10% 25%;
+    --muted-hsl: 270 10% 93%;
+    --muted-foreground-hsl: 270 5% 50%;
+    --accent-hsl: 270 60% 96%;
+    --accent-foreground-hsl: 270 70% 40%;
+    --destructive-hsl: 330 75% 55%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 270 10% 88%;
+    --input-hsl: 270 10% 88%;
+    --ring-hsl: 270 70% 55%;
+    --body-font: var(--font-mono);
+}
+
+/* Gaming Theme - Dark */
+.dark .theme-gaming {
+    --background-hsl: 270 15% 8%;
+    --foreground-hsl: 270 10% 95%;
+    --card-hsl: 270 15% 12%;
+    --card-foreground-hsl: 270 10% 95%;
+    --popover-hsl: 270 15% 12%;
+    --popover-foreground-hsl: 270 10% 95%;
+    --primary-hsl: 270 65% 65%;
+    --primary-foreground-hsl: 270 10% 5%;
+    --secondary-hsl: 270 10% 18%;
+    --secondary-foreground-hsl: 270 10% 90%;
+    --muted-hsl: 270 10% 18%;
+    --muted-foreground-hsl: 270 5% 65%;
+    --accent-hsl: 270 50% 22%;
+    --accent-foreground-hsl: 270 65% 85%;
+    --destructive-hsl: 330 60% 45%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 270 10% 25%;
+    --input-hsl: 270 10% 25%;
+    --ring-hsl: 270 65% 65%;
+    --body-font: var(--font-mono);
+}
+
+
+/* Mature Theme - Light */
+.theme-mature {
+    --background-hsl: 0 0% 98%;
+    --foreground-hsl: 0 0% 10%;
+    --card-hsl: 0 0% 100%;
+    --card-foreground-hsl: 0 0% 10%;
+    --popover-hsl: 0 0% 100%;
+    --popover-foreground-hsl: 0 0% 10%;
+    --primary-hsl: 0 0% 30%;
+    --primary-foreground-hsl: 0 0% 95%;
+    --secondary-hsl: 0 0% 94%;
+    --secondary-foreground-hsl: 0 0% 20%;
+    --muted-hsl: 0 0% 94%;
+    --muted-foreground-hsl: 0 0% 45%;
+    --accent-hsl: 0 0% 96%;
+    --accent-foreground-hsl: 0 0% 25%;
+    --destructive-hsl: 0 84.2% 60.2%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 0 0% 88%;
+    --input-hsl: 0 0% 88%;
+    --ring-hsl: 0 0% 50%;
+    --body-font: var(--font-mono);
+}
+
+/* Mature Theme - Dark */
+.dark .theme-mature {
+    --background-hsl: 0 0% 5%;
+    --foreground-hsl: 0 0% 95%;
+    --card-hsl: 0 0% 10%;
+    --card-foreground-hsl: 0 0% 95%;
+    --popover-hsl: 0 0% 10%;
+    --popover-foreground-hsl: 0 0% 95%;
+    --primary-hsl: 0 0% 70%;
+    --primary-foreground-hsl: 0 0% 10%;
+    --secondary-hsl: 0 0% 15%;
+    --secondary-foreground-hsl: 0 0% 90%;
+    --muted-hsl: 0 0% 15%;
+    --muted-foreground-hsl: 0 0% 65%;
+    --accent-hsl: 0 0% 12%;
+    --accent-foreground-hsl: 0 0% 80%;
+    --destructive-hsl: 0 62.8% 30.6%;
+    --destructive-foreground-hsl: 0 0% 98%;
+    --border-hsl: 0 0% 20%;
+    --input-hsl: 0 0% 20%;
+    --ring-hsl: 0 0% 60%;
+    --body-font: var(--font-mono);
+}
+
+/* Global Styles */
+body {
+    background-color: hsl(var(--background-hsl));
+    color: hsl(var(--foreground-hsl));
+    font-family: var(--body-font);
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a {
+    color: hsl(var(--primary-hsl));
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: hsl(var(--accent-foreground-hsl)); /* Use accent foreground for hover */
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+hr {
+    border: none;
+    border-top: 1px solid hsl(var(--border-hsl));
+    margin: 1.5rem 0;
+}
+
+/* Container */
+.container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem; /* Add some padding */
+}
+
+/* Header Styles */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    border-bottom: 1px solid hsl(var(--border-hsl));
+    background-color: hsla(var(--background-hsl), 0.95); /* Semi-transparent background */
+    backdrop-filter: blur(5px);
+    box-shadow: 0 1px 3px hsla(var(--foreground-hsl), 0.05);
+}
+
+.site-header .container {
+    display: flex;
+    height: 4rem; /* 64px */
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px */
+    font-size: 1.125rem; /* 18px */
+    font-weight: 600;
+    color: hsl(var(--foreground-hsl));
+    transition: color 0.2s ease;
+}
+
+.logo:hover {
+     color: hsl(var(--primary-hsl));
+     text-decoration: none;
+}
+
+.logo svg {
+    width: 1.5rem; /* 24px */
+    height: 1.5rem; /* 24px */
+    color: hsl(var(--primary-hsl));
+}
+
+.logo span {
+    font-weight: bold;
+}
+
+
+.main-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem; /* 8px */
+}
+
+/* Main Content Area */
+.content-area {
+    flex-grow: 1;
+    padding-top: 2rem; /* 32px */
+    padding-bottom: 2rem; /* 32px */
+}
+
+.page-header {
+    margin-bottom: 2rem; /* 32px */
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    gap: 1rem; /* 16px */
+}
+
+.page-header h1 {
+    font-size: 1.875rem; /* 30px */
+    font-weight: bold;
+    letter-spacing: -0.025em;
+    color: hsl(var(--foreground-hsl));
+}
+
+/* Post Grid */
+.post-grid {
+    display: grid;
+    gap: 1.5rem; /* 24px */
+    grid-template-columns: 1fr; /* Default: one column */
+}
+
+@media (min-width: 768px) { /* md breakpoint */
+    .post-grid {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on medium screens */
+    }
+    .page-header {
+         flex-direction: row;
+         justify-content: space-between;
+    }
+     .page-header h1 {
+        font-size: 2.25rem; /* 36px */
+    }
+}
+
+@media (min-width: 1024px) { /* lg breakpoint */
+    .post-grid {
+        grid-template-columns: repeat(3, 1fr); /* Three columns on large screens */
+    }
+}
+
+
+/* Card Styles */
+.card {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border-hsl));
+    background-color: hsl(var(--card-hsl));
+    color: hsl(var(--card-foreground-hsl));
+    box-shadow: 0 1px 3px 0 hsla(var(--foreground-hsl), 0.1), 0 1px 2px -1px hsla(var(--foreground-hsl), 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 15px -3px hsla(var(--foreground-hsl), 0.1), 0 4px 6px -4px hsla(var(--foreground-hsl), 0.1);
+}
+
+.card-image-container {
+    position: relative;
+    /* aspect-ratio: 16 / 9; */ /* Or fixed height */
+    height: 12rem; /* 192px */
+    width: 100%;
+    overflow: hidden; /* Ensure image doesn't overflow */
+}
+
+.card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the container */
+    transition: opacity 0.3s ease-in-out;
+}
+
+.card:hover .card-image {
+    opacity: 0.9;
+}
+
+.card-header {
+    padding: 1.5rem; /* 24px */
+    position: relative; /* For absolute badge positioning */
+}
+
+.card-title {
+    font-size: 1.25rem; /* 20px */
+    line-height: 1.3;
+    font-weight: 600;
+}
+.card-title a:hover {
+    color: hsl(var(--primary-hsl));
+    text-decoration: none;
+}
+
+
+.card-description {
+    font-size: 0.875rem; /* 14px */
+    color: hsl(var(--muted-foreground-hsl));
+    margin-top: 0.25rem; /* 4px */
+}
+
+.card-content {
+    padding: 0 1.5rem 1.5rem; /* 24px */
+    flex-grow: 1;
+}
+
+.card-content p {
+    color: hsl(var(--muted-foreground-hsl));
+    /* line-clamp equivalent */
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+
+.card-footer {
+    padding: 0 1.5rem 1.5rem; /* 24px */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem; /* 8px */
+}
+
+.card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem; /* 4px */
+}
+
+
+/* Badge Styles */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px; /* Fully rounded */
+    border: 1px solid hsl(var(--border-hsl));
+    padding: 0.125rem 0.625rem; /* 2px 10px */
+    font-size: 0.75rem; /* 12px */
+    font-weight: 500;
+    transition: colors 0.2s ease;
+    white-space: nowrap;
+}
+
+.badge-secondary {
+    background-color: hsl(var(--secondary-hsl));
+    color: hsl(var(--secondary-foreground-hsl));
+    border-color: transparent;
+}
+.badge-secondary:hover {
+    background-color: hsla(var(--secondary-hsl), 0.8);
+}
+
+.badge-outline {
+    color: hsl(var(--foreground-hsl));
+    background-color: transparent; /* Default outline is transparent */
+}
+/* Topic badge specific styling */
+.badge-topic {
+    position: absolute;
+    top: 0.5rem; /* 8px */
+    right: 0.5rem; /* 8px */
+    background-color: hsla(var(--background-hsl), 0.8);
+    backdrop-filter: blur(2px);
+    display: inline-flex; /* Use inline-flex for icon alignment */
+    align-items: center;
+    gap: 0.25rem; /* Gap between icon and text */
+    padding: 0.125rem 0.5rem; /* Adjust padding */
+}
+.badge-topic svg {
+    width: 0.75rem; /* 12px */
+    height: 0.75rem; /* 12px */
+}
+
+
+/* Button Styles */
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Gap between icon and text */
+    white-space: nowrap;
+    border-radius: var(--radius);
+    font-size: 0.875rem; /* 14px */
+    font-weight: 500;
+    padding: 0.5rem 1rem; /* 8px 16px */
+    height: 2.5rem; /* 40px */
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid transparent; /* Default border */
+    outline: none; /* Remove default outline */
+}
+.button:focus-visible {
+    box-shadow: 0 0 0 2px hsl(var(--background-hsl)), 0 0 0 4px hsl(var(--ring-hsl)); /* Focus ring */
+}
+
+.button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+.button-default { /* Simulate ShadCN default */
+    background-color: hsl(var(--primary-hsl));
+    color: hsl(var(--primary-foreground-hsl));
+}
+.button-default:hover {
+     background-color: hsla(var(--primary-hsl), 0.9);
+}
+
+
+.button-destructive {
+    background-color: hsl(var(--destructive-hsl));
+    color: hsl(var(--destructive-foreground-hsl));
+}
+.button-destructive:hover {
+     background-color: hsla(var(--destructive-hsl), 0.9);
+}
+
+.button-outline {
+    border-color: hsl(var(--input-hsl));
+    background-color: hsl(var(--background-hsl));
+    color: hsl(var(--foreground-hsl));
+}
+.button-outline:hover {
+    background-color: hsl(var(--accent-hsl));
+    color: hsl(var(--accent-foreground-hsl));
+}
+
+.button-secondary {
+    background-color: hsl(var(--secondary-hsl));
+    color: hsl(var(--secondary-foreground-hsl));
+}
+.button-secondary:hover {
+     background-color: hsla(var(--secondary-hsl), 0.8);
+}
+
+.button-ghost {
+    background-color: transparent;
+    color: hsl(var(--foreground-hsl));
+}
+.button-ghost:hover {
+    background-color: hsl(var(--accent-hsl));
+    color: hsl(var(--accent-foreground-hsl));
+}
+
+.button-link {
+    color: hsl(var(--primary-hsl));
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    background-color: transparent;
+    padding: 0; /* Remove padding for link style */
+    height: auto; /* Auto height */
+}
+.button-link:hover {
+    text-decoration: underline; /* Keep underline on hover */
+}
+
+.icon-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem; /* 40px */
+    height: 2.5rem; /* 40px */
+    padding: 0;
+    border-radius: var(--radius);
+    background-color: transparent;
+    border: none;
+    color: hsl(var(--foreground-hsl));
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon-button:hover {
+    background-color: hsl(var(--accent-hsl));
+    color: hsl(var(--accent-foreground-hsl));
+}
+
+.icon-button svg {
+    width: 1.25rem; /* 20px */
+    height: 1.25rem; /* 20px */
+}
+
+
+/* Footer Styles */
+.site-footer {
+    margin-top: 3rem; /* 48px */
+    border-top: 1px solid hsl(var(--border-hsl));
+    padding: 1.5rem 0; /* 24px */
+    text-align: center;
+    font-size: 0.875rem; /* 14px */
+    color: hsl(var(--muted-foreground-hsl));
+}
+
+
+/* Post Detail Page Styles */
+.post-detail {
+    max-width: 48rem; /* 768px */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.post-detail .back-button-container {
+     margin-bottom: 1.5rem; /* 24px */
+     margin-left: -0.5rem; /* Adjust for ghost button padding */
+}
+.post-detail .back-button-container svg {
+     margin-right: 0.5rem;
+}
+
+.post-image-container {
+    position: relative;
+    margin-bottom: 2rem; /* 32px */
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius);
+    box-shadow: 0 4px 6px -1px hsla(var(--foreground-hsl), 0.1), 0 2px 4px -2px hsla(var(--foreground-hsl), 0.1);
+}
+
+.post-image {
+     position: absolute;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     object-fit: cover;
+}
+
+
+.post-detail header {
+    margin-bottom: 2rem; /* 32px */
+}
+
+.post-detail h1 {
+    margin-bottom: 0.75rem; /* 12px */
+    font-size: 2.25rem; /* 36px */
+    font-weight: 800; /* extrabold */
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    color: hsl(var(--foreground-hsl));
+}
+
+@media (min-width: 1024px) { /* lg breakpoint */
+    .post-detail h1 {
+        font-size: 3rem; /* 48px */
+    }
+}
+
+.post-meta {
+    font-size: 0.875rem; /* 14px */
+    color: hsl(var(--muted-foreground-hsl));
+}
+
+.post-tags {
+    margin-top: 1rem; /* 16px */
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem; /* 8px */
+}
+
+.post-separator {
+    margin: 2rem 0; /* 32px */
+    border-top: 1px solid hsl(var(--border-hsl));
+}
+
+/* Prose Styles (Basic Markdown Styling) */
+.prose {
+    line-height: 1.7;
+    color: hsl(var(--foreground-hsl));
+}
+
+.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h5 {
+    color: hsl(var(--foreground-hsl));
+    font-weight: 600;
+    margin-top: 1.5em;
+    margin-bottom: 0.8em;
+    line-height: 1.3;
+}
+
+.prose h1 { font-size: 2em; }
+.prose h2 { font-size: 1.5em; }
+.prose h3 { font-size: 1.25em; }
+.prose h4 { font-size: 1em; }
+
+.prose p {
+    margin-bottom: 1.25em;
+}
+
+.prose a {
+    color: hsl(var(--primary-hsl));
+    text-decoration: underline;
+    font-weight: 500;
+}
+.prose a:hover {
+    color: hsl(var(--accent-foreground-hsl));
+}
+
+
+.prose strong {
+    color: hsl(var(--foreground-hsl));
+    font-weight: 600;
+}
+
+.prose blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 1em;
+    border-left: 0.25em solid hsl(var(--border-hsl));
+    color: hsl(var(--foreground-hsl));
+    font-style: italic;
+}
+.prose blockquote p {
+    margin-bottom: 0; /* Remove margin for paragraphs inside blockquotes */
+}
+
+
+.prose ul, .prose ol {
+    margin-left: 1.5em;
+    margin-bottom: 1.25em;
+}
+.prose li {
+    margin-bottom: 0.5em;
+}
+.prose ul li::marker {
+    color: hsl(var(--border-hsl));
+}
+
+.prose code {
+    font-family: var(--font-mono);
+    background-color: hsl(var(--muted-hsl));
+    color: hsl(var(--muted-foreground-hsl));
+    padding: 0.2em 0.4em;
+    border-radius: calc(var(--radius) - 4px); /* sm */
+    font-size: 0.875em;
+}
+
+.prose pre {
+    font-family: var(--font-mono);
+    background-color: hsl(var(--muted-hsl));
+    color: hsl(var(--muted-foreground-hsl));
+    padding: 1em;
+    border-radius: var(--radius);
+    overflow-x: auto;
+    margin-bottom: 1.25em;
+    font-size: 0.875em;
+    line-height: 1.5;
+}
+
+.prose pre code {
+    background-color: transparent;
+    color: inherit;
+    padding: 0;
+    border-radius: 0;
+    font-size: 1em; /* Reset font size for code inside pre */
+}
+
+.prose img {
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px hsla(var(--foreground-hsl), 0.1);
+    margin-top: 1.5em;
+    margin-bottom: 1.5em;
+}
+
+.prose table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1.25em;
+}
+.prose th, .prose td {
+    border: 1px solid hsl(var(--border-hsl));
+    padding: 0.5em 0.75em;
+    text-align: left;
+}
+.prose thead {
+    border-bottom: 2px solid hsl(var(--border-hsl));
+}
+.prose th {
+    font-weight: 600;
+    color: hsl(var(--foreground-hsl));
+}
+
+
+/* Skeleton Loading Styles */
+@keyframes pulse {
+  50% { opacity: .5; }
+}
+
+.skeleton-card {
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border-hsl));
+    background-color: hsl(var(--card-hsl));
+    padding: 1.5rem;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    height: 350px; /* Adjust height as needed */
+}
+
+/* No posts message */
+.no-posts-message {
+    text-align: center;
+    padding: 2.5rem 0; /* py-10 */
+    color: hsl(var(--muted-foreground-hsl));
+}
+
+/* Dropdown Styles */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none; /* Hidden by default */
+    position: absolute;
+    right: 0; /* Align to the right */
+    background-color: hsl(var(--popover-hsl));
+    color: hsl(var(--popover-foreground-hsl));
+    min-width: 10rem; /* 160px */
+    border-radius: var(--radius);
+    border: 1px solid hsl(var(--border-hsl));
+    box-shadow: 0 4px 6px -1px hsla(var(--foreground-hsl), 0.1), 0 2px 4px -2px hsla(var(--foreground-hsl), 0.1);
+    padding: 0.25rem; /* p-1 */
+    z-index: 60; /* Ensure it's above other content */
+}
+
+.dropdown-content.show {
+    display: block;
+}
+
+.dropdown-content a, .dropdown-content .radio-item {
+    color: hsl(var(--popover-foreground-hsl));
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    text-decoration: none;
+    display: flex; /* Use flex for icon alignment */
+    align-items: center;
+    gap: 0.5rem; /* Space between icon and text */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600; /* font-semibold */
+    border-radius: calc(var(--radius) - 4px); /* sm */
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.dropdown-content a:hover, .dropdown-content .radio-item:hover {
+    background-color: hsl(var(--accent-hsl));
+    color: hsl(var(--accent-foreground-hsl));
+}
+.dropdown-content a svg, .dropdown-content .radio-item svg {
+     width: 1rem; /* 16px */
+     height: 1rem; /* 16px */
+}
+
+.dropdown-label {
+    padding: 0.5rem 1rem; /* py-2 px-4 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 600; /* font-semibold */
+    color: hsl(var(--popover-foreground-hsl));
+}
+
+.radio-item {
+    position: relative;
+    padding-left: 2rem; /* Make space for the indicator */
+}
+
+.radio-item::before { /* Simulate radio indicator */
+    content: '';
+    position: absolute;
+    left: 0.75rem; /* Adjust position */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0.5rem; /* 8px */
+    height: 0.5rem; /* 8px */
+    border-radius: 50%;
+    background-color: transparent;
+    transition: background-color 0.2s ease;
+}
+
+.radio-item.selected::before {
+     background-color: hsl(var(--primary-hsl)); /* Fill circle when selected */
+}
+
+/* Dialog Styles (for Mature Consent) */
+.dialog-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 70; /* Higher than header */
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.dialog-content {
+    background-color: hsl(var(--background-hsl));
+    color: hsl(var(--foreground-hsl));
+    border-radius: var(--radius);
+    padding: 1.5rem; /* p-6 */
+    box-shadow: 0 10px 15px -3px hsla(var(--foreground-hsl), 0.1), 0 4px 6px -4px hsla(var(--foreground-hsl), 0.1);
+    width: 100%;
+    max-width: 32rem; /* max-w-lg */
+    display: grid;
+    gap: 1rem; /* gap-4 */
+}
+
+.dialog-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem; /* space-y-2 */
+    text-align: left;
+}
+
+.dialog-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.dialog-icon-title {
+    width: 1.25rem;
+    height: 1.25rem;
+    color: hsl(var(--destructive-hsl));
+}
+
+
+.dialog-description {
+    font-size: 0.875rem; /* text-sm */
+    color: hsl(var(--muted-foreground-hsl));
+}
+
+.dialog-footer {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 0.5rem; /* space-x-2 for row */
+}
+
+@media (min-width: 640px) { /* sm breakpoint */
+    .dialog-footer {
+        flex-direction: row;
+        justify-content: flex-end;
+    }
+}
+
+/* Ensure icons in theme switcher don't have excessive size */
+.theme-switcher-container svg {
+    display: inline-block; /* Prevent layout shifts */
+    vertical-align: middle;
+}
+
+/* Hide moon/sun based on dark class */
+.dark #sun-icon { display: none; }
+.dark #moon-icon { display: inline-block; }
+html:not(.dark) #sun-icon { display: inline-block; }
+html:not(.dark) #moon-icon { display: none; }
+
+/* Theme switcher specific container */
+.theme-switcher-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem; /* 4px */
+}
+
+/* Back button container on post page */
+.back-button-container {
+     margin-top: 1.5rem; /* Add some space above the footer */
+     margin-bottom: 1rem;
+}
+
+.back-button-container .button svg {
+     margin-right: 0.5rem;
+}
