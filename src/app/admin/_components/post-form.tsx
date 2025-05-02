@@ -15,6 +15,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"; // Import Select components
 import type { BlogPost } from "@/types";
 import { Loader2 } from "lucide-react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -30,6 +37,7 @@ const formSchema = z.object({
   content: z.string().min(20, {
     message: "Content must be at least 20 characters.",
   }),
+  topic: z.enum(['tech', 'classic', 'food']).optional(), // Added topic field validation
   author: z.string().optional(),
   tags: z.string().optional(), // Comma-separated string for simplicity
   imageUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')), // Allow empty string
@@ -52,6 +60,7 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
       title: initialData?.title || "",
       excerpt: initialData?.excerpt || "",
       content: initialData?.content || "",
+      topic: initialData?.topic || undefined, // Set initial topic
       author: initialData?.author || "",
       tags: initialData?.tags?.join(', ') || "",
       imageUrl: initialData?.imageUrl || "",
@@ -81,6 +90,31 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
                   <FormControl>
                     <Input placeholder="Your Awesome Blog Post Title" {...field} />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="topic"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Topic</FormLabel>
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a topic (optional)" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="tech">Tech</SelectItem>
+                      <SelectItem value="classic">Classic</SelectItem>
+                      <SelectItem value="food">Food</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormDescription>
+                    Categorize your post. This affects filtering.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}

@@ -11,6 +11,7 @@ const postActionSchema = z.object({
   title: z.string().min(2),
   excerpt: z.string().min(10).max(200),
   content: z.string().min(20),
+  topic: z.enum(['tech', 'classic', 'food']).optional(), // Added topic validation
   author: z.string().optional(),
   tags: z.string().optional(), // Comma-separated string
   imageUrl: z.string().url().optional().or(z.literal('')),
@@ -23,19 +24,20 @@ const processTags = (tagsString?: string): string[] | undefined => {
 }
 
 // Action to create a new post
-export async function createPostAction(formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string }> {
+export async function createPostAction(formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string | object }> {
   // Validate input
   const validatedFields = postActionSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     console.error('Validation Error:', validatedFields.error.flatten().fieldErrors);
-    return { success: false, error: "Invalid input data. " + validatedFields.error.flatten().fieldErrors };
+    return { success: false, error: validatedFields.error.flatten().fieldErrors };
   }
 
   const { tags, ...rest } = validatedFields.data;
   const postData = {
       ...rest,
       tags: processTags(tags),
+      topic: rest.topic || undefined, // Ensure topic is correctly passed
   };
 
 
@@ -52,19 +54,20 @@ export async function createPostAction(formData: unknown): Promise<{ success: bo
 }
 
 // Action to update an existing post
-export async function updatePostAction(slug: string, formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string }> {
+export async function updatePostAction(slug: string, formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string | object }> {
    // Validate input
   const validatedFields = postActionSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     console.error('Validation Error:', validatedFields.error.flatten().fieldErrors);
-     return { success: false, error: "Invalid input data. " + JSON.stringify(validatedFields.error.flatten().fieldErrors) };
+     return { success: false, error: validatedFields.error.flatten().fieldErrors };
   }
 
    const { tags, ...rest } = validatedFields.data;
    const postData = {
       ...rest,
       tags: processTags(tags),
+      topic: rest.topic || undefined, // Ensure topic is correctly passed
    };
 
   try {

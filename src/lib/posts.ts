@@ -36,6 +36,7 @@ Explore the documentation to learn more!
     tags: ['Next.js', 'React', 'Web Development'],
     imageUrl: 'https://picsum.photos/seed/nextjs/800/400',
     imageAlt: 'Abstract code background',
+    topic: 'tech', // Added topic
   },
   {
     slug: 'styling-in-tailwind',
@@ -73,6 +74,7 @@ Tailwind makes styling intuitive and fast.
     tags: ['CSS', 'Tailwind CSS', 'Styling'],
     imageUrl: 'https://picsum.photos/seed/tailwind/800/400',
     imageAlt: 'Tailwind CSS logo',
+    topic: 'tech', // Added topic
   },
   {
     slug: 'state-management-react',
@@ -99,6 +101,59 @@ Choosing the right solution depends on the application's complexity and specific
     tags: ['React', 'State Management', 'JavaScript'],
     imageUrl: 'https://picsum.photos/seed/reactstate/800/400',
     imageAlt: 'Diagram illustrating state flow',
+    topic: 'tech', // Added topic
+  },
+   {
+    slug: 'vintage-book-binding',
+    title: 'The Art of Vintage Book Binding',
+    date: '2024-07-23',
+    excerpt: 'Exploring the traditional techniques of classic bookbinding.',
+    content: `
+## A Timeless Craft
+
+Bookbinding is an art form with centuries of history. Classic techniques involve meticulous handwork, quality materials like leather and linen, and decorative elements like gold tooling.
+
+## Key Steps
+
+1.  **Folding & Sewing:** Pages are folded into signatures and sewn together to form the text block.
+2.  **Rounding & Backing:** The spine is shaped and reinforced.
+3.  **Board Attachment:** Cover boards are attached.
+4.  **Covering:** The chosen material (leather, cloth) is carefully applied.
+5.  **Finishing:** Decorative tooling, labels, and endpapers are added.
+
+Preserving these skills honours the history of the written word.
+    `,
+    author: 'Edward Ledger',
+    tags: ['Books', 'Craft', 'History', 'Classic'],
+    imageUrl: 'https://picsum.photos/seed/bookbinding/800/400',
+    imageAlt: 'Old books stacked with binding tools',
+    topic: 'classic', // Added topic
+  },
+   {
+    slug: 'perfect-sourdough',
+    title: 'Baking the Perfect Sourdough Loaf',
+    date: '2024-07-22',
+    excerpt: 'A guide to achieving a tangy flavor and open crumb in your homemade sourdough.',
+    content: `
+## The Sourdough Journey
+
+Baking sourdough is a rewarding process that relies on cultivating a wild yeast starter. Patience and understanding the fermentation process are key.
+
+## Essential Tips
+
+*   **Starter Health:** Feed your starter regularly and keep it active.
+*   **Hydration:** Adjust water content based on your flour type.
+*   **Bulk Fermentation:** Allow enough time for the dough to develop flavour and strength. Use "stretch and folds".
+*   **Shaping:** Gently shape the dough to build tension for a good oven spring.
+*   **Baking:** Use a Dutch oven for steam, creating a crispy crust.
+
+Enjoy the delicious results of your effort!
+`,
+    author: 'Olivia Baker',
+    tags: ['Baking', 'Sourdough', 'Food', 'Recipe'],
+    imageUrl: 'https://picsum.photos/seed/sourdough/800/400',
+    imageAlt: 'A golden-brown sourdough loaf on a wooden board',
+    topic: 'food', // Added topic
   },
 ];
 
@@ -127,6 +182,7 @@ export async function createPost(postData: Omit<BlogPost, 'slug' | 'date'>): Pro
     ...postData,
     slug: postData.title.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]+/g, ''),
     date: new Date().toISOString().split('T')[0], // Use current date
+    topic: postData.topic || undefined, // Include topic
   };
   mockPosts.unshift(newPost); // Add to the beginning of the mock list
   return newPost;
@@ -138,7 +194,8 @@ export async function updatePost(slug: string, postData: Partial<BlogPost>): Pro
   if (index === -1) return null;
 
   // Create a new object for the updated post to avoid mutation issues if needed
-  const updatedPost = { ...mockPosts[index], ...postData, slug }; // Ensure slug remains the same or update if title changed
+  // Ensure topic is included in the update
+  const updatedPost = { ...mockPosts[index], ...postData, slug, topic: postData.topic || mockPosts[index].topic };
   mockPosts[index] = updatedPost;
   return updatedPost;
 }

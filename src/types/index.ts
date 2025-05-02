@@ -9,4 +9,5 @@ export interface BlogPost {
   tags?: string[];
   imageUrl?: string;
   imageAlt?: string;
+  topic?: 'tech' | 'classic' | 'food'; // Added topic field
 }
