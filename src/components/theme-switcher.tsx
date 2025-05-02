@@ -1,8 +1,7 @@
-
 "use client"
 
 import * as React from "react"
-import { Moon, Sun, Monitor, AlertTriangle as AlertIcon } from "lucide-react" // Keep system icons, add AlertTriangle
+import { Moon, Sun, Monitor, AlertTriangle as AlertIcon } from "lucide-react"
 import { useTheme } from "next-themes"
 
 import { Button } from "@/components/ui/button"
@@ -15,31 +14,37 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"; // Import AlertDialog components
+} from "@/components/ui/alert-dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem, // Keep for light/dark/system
+  DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
 } from "@/components/ui/dropdown-menu"
-import { TOPICS, getTopicFromClassName, getTopicInfo, ALL_TOPICS } from "@/lib/topics"; // Import from central lib
+import { TOPICS, getTopicInfo, ALL_TOPICS } from "@/lib/topics";
 import type { BlogTopic } from "@/types";
+
+const MATURE_CONSENT_KEY = "mature_content_consent";
 
 export function ThemeSwitcher() {
   const { theme, setTheme, resolvedTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
-  const [activeTopic, setActiveTopic] = React.useState<BlogTopic>('tech'); // Default topic
-  const [pendingTopic, setPendingTopic] = React.useState<BlogTopic | null>(null); // Store topic pending confirmation
-  const [showMatureConfirm, setShowMatureConfirm] = React.useState(false); // State for AlertDialog
+  const [activeTopic, setActiveTopic] = React.useState<BlogTopic>('tech');
+  const [pendingTopic, setPendingTopic] = React.useState<BlogTopic | null>(null);
+  const [showMatureConfirm, setShowMatureConfirm] = React.useState(false);
+  const [hasMatureConsent, setHasMatureConsent] = React.useState(false);
 
-  // Effect to sync activeTopic with body class
+  // Effect to check for consent on mount and sync activeTopic with body class
   React.useEffect(() => {
-    const body = document.body;
+    // Check localStorage for consent only on the client-side
+    const consent = localStorage.getItem(MATURE_CONSENT_KEY) === 'true';
+    setHasMatureConsent(consent);
 
+    const body = document.body;
     const updateActiveTopicFromClass = () => {
        let currentTopic: BlogTopic = 'tech'; // Default
         for (const [key, config] of Object.entries(TOPICS)) {
@@ -51,8 +56,7 @@ export function ThemeSwitcher() {
         setActiveTopic(currentTopic);
     }
 
-    // Initial check
-    updateActiveTopicFromClass();
+    updateActiveTopicFromClass(); // Initial check
 
     const observer = new MutationObserver((mutations) => {
          for (const mutation of mutations) {
@@ -65,46 +69,45 @@ export function ThemeSwitcher() {
 
     observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
 
-    // Ensure component is mounted
-    setMounted(true);
+    setMounted(true); // Indicate component is mounted
 
     return () => observer.disconnect();
-  }, []);
+  }, []); // Run only once on mount
 
 
   const applyThemeClass = (topicKey: BlogTopic) => {
     const body = document.body;
-    // Remove all existing theme classes
     Object.values(TOPICS).forEach(config => {
       if (config.className) {
         body.classList.remove(config.className);
       }
     });
 
-    // Add the new theme class
     const newTopicConfig = TOPICS[topicKey];
     if (newTopicConfig?.className) {
       body.classList.add(newTopicConfig.className);
     }
-     setActiveTopic(topicKey); // Update state after applying class
-     // Closing the dialog happens in the action handlers
+    setActiveTopic(topicKey);
   }
 
   const handleTopicChange = (value: string) => {
     const newTopicKey = value as BlogTopic;
-    if (newTopicKey === activeTopic) return; // No change
+    if (newTopicKey === activeTopic) return;
 
-    if (newTopicKey === 'mature') {
-        setPendingTopic(newTopicKey); // Store 'mature' as pending
-        setShowMatureConfirm(true); // Open the dialog
+    if (newTopicKey === 'mature' && !hasMatureConsent) {
+        setPendingTopic(newTopicKey);
+        setShowMatureConfirm(true);
     } else {
-        applyThemeClass(newTopicKey); // Apply other themes directly
+        applyThemeClass(newTopicKey);
     }
   };
 
   const confirmMatureTheme = () => {
       if (pendingTopic === 'mature') {
           applyThemeClass('mature');
+          // Store consent in localStorage
+          localStorage.setItem(MATURE_CONSENT_KEY, 'true');
+          setHasMatureConsent(true); // Update state
       }
       setShowMatureConfirm(false);
       setPendingTopic(null);
@@ -113,59 +116,75 @@ export function ThemeSwitcher() {
   const cancelMatureTheme = () => {
         setShowMatureConfirm(false);
         setPendingTopic(null);
-        // Revert the radio group selection visually if needed,
-        // though the actual class hasn't changed yet.
-        // The value prop of DropdownMenuRadioGroup should handle this.
+        // Radio group value binding should handle visual state automatically
   }
 
   if (!mounted) {
+    // Render a placeholder or null during server-side rendering and initial mount
     return (
-      <Button variant="ghost" size="icon" disabled>
-        <Sun className="h-[1.2rem] w-[1.2rem]" />
-      </Button>
-    )
+      <div className="flex items-center gap-2">
+         <Button variant="ghost" size="icon" disabled>
+           <Sun className="h-[1.2rem] w-[1.2rem]" />
+         </Button>
+         <Button variant="ghost" size="icon" disabled>
+            <Monitor className="h-[1.2rem] w-[1.2rem]" />
+         </Button>
+      </div>
+    );
   }
 
   const CurrentTopicIcon = TOPICS[activeTopic]?.icon || Monitor; // Fallback icon
 
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" title={`Change Style (Current: ${TOPICS[activeTopic]?.label})`}>
-            {/* Display icon of the currently active topic */}
-            <CurrentTopicIcon className="h-[1.2rem] w-[1.2rem] transition-all" />
-            <span className="sr-only">Toggle theme style</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>Select Style (Filters Posts)</DropdownMenuLabel>
-          <DropdownMenuRadioGroup value={activeTopic} onValueChange={handleTopicChange}>
-            {ALL_TOPICS.map((topicKey) => {
-              const topicInfo = getTopicInfo(topicKey);
-              return topicInfo ? (
-              <DropdownMenuRadioItem key={topicKey} value={topicKey}>
-                  <topicInfo.icon className="mr-2 h-4 w-4" />
-                  <span>{topicInfo.label}</span>
-              </DropdownMenuRadioItem>
-              ) : null;
-            })}
-          </DropdownMenuRadioGroup>
+       <div className="flex items-center gap-1">
+         {/* Light/Dark Toggle */}
+         <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" title={`Change Appearance (${theme})`}>
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+                <span className="sr-only">Toggle theme appearance</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                <Sun className="mr-2 h-4 w-4" /> Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                <Moon className="mr-2 h-4 w-4" /> Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                 <Monitor className="mr-2 h-4 w-4" /> System
+               </DropdownMenuItem>
+            </DropdownMenuContent>
+         </DropdownMenu>
 
-          {/* Optional: Keep light/dark/system controls if desired */}
-           {/* <DropdownMenuSeparator />
-           <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-           <DropdownMenuItem onClick={() => setTheme("light")}>
-            <Sun className="mr-2 h-4 w-4" /> Light
-           </DropdownMenuItem>
-           <DropdownMenuItem onClick={() => setTheme("dark")}>
-             <Moon className="mr-2 h-4 w-4" /> Dark
-           </DropdownMenuItem>
-           <DropdownMenuItem onClick={() => setTheme("system")}>
-             <Monitor className="mr-2 h-4 w-4" /> System
-           </DropdownMenuItem> */}
-        </DropdownMenuContent>
-      </DropdownMenu>
+        {/* Topic Style Dropdown */}
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" title={`Change Style (Current: ${TOPICS[activeTopic]?.label})`}>
+                <CurrentTopicIcon className="h-[1.2rem] w-[1.2rem] transition-all" />
+                <span className="sr-only">Toggle theme style</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Select Style (Filters Posts)</DropdownMenuLabel>
+              <DropdownMenuRadioGroup value={activeTopic} onValueChange={handleTopicChange}>
+                {ALL_TOPICS.map((topicKey) => {
+                  const topicInfo = getTopicInfo(topicKey);
+                  return topicInfo ? (
+                  <DropdownMenuRadioItem key={topicKey} value={topicKey}>
+                      <topicInfo.icon className="mr-2 h-4 w-4" />
+                      <span>{topicInfo.label}</span>
+                  </DropdownMenuRadioItem>
+                  ) : null;
+                })}
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+        </DropdownMenu>
+     </div>
 
       {/* Mature Content Confirmation Dialog */}
       <AlertDialog open={showMatureConfirm} onOpenChange={setShowMatureConfirm}>
@@ -176,7 +195,7 @@ export function ThemeSwitcher() {
                 Mature Content Warning
             </AlertDialogTitle>
             <AlertDialogDescription>
-              The &quot;Mature&quot; style filters posts that may contain sensitive or adult themes. Are you sure you want to proceed?
+              The &quot;Mature&quot; style filters posts that may contain sensitive or adult themes. Selecting this style implies you are comfortable viewing such content. Are you sure you want to proceed?
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
