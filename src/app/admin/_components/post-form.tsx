@@ -35,6 +35,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
 // Define Zod schema for validation
+// Removed author field from schema
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
@@ -45,10 +46,9 @@ const formSchema = z.object({
   content: z.string().min(20, {
     message: "Content must be at least 20 characters.",
   }),
-  topic: z.enum(ALL_TOPICS, { required_error: "Please select a topic." }), // Make topic required
-  author: z.string().optional(), // Author will be handled by auth later
-  tags: z.string().min(1, { message: "Please enter at least one tag."}), // Make tags required, validate as string first
-  imageUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')), // Existing URL field
+  topic: z.enum(ALL_TOPICS, { required_error: "Please select a topic." }),
+  tags: z.string().min(1, { message: "Please enter at least one tag."}),
+  imageUrl: z.string().url({ message: "Please enter a valid URL." }).optional().or(z.literal('')),
   imageFile: z
     .custom<File | null>((file) => file instanceof File || file === null, "Invalid file type")
     .refine(
@@ -58,11 +58,11 @@ const formSchema = z.object({
     .refine(
         (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
         "Only .jpg, .jpeg, .png, .webp and .gif formats are supported."
-    ).optional(), // File upload field
+    ).optional(),
   imageAlt: z.string().optional(),
 }).refine(data => !!data.imageUrl || !!data.imageFile, {
     message: "Either an Image URL or an uploaded image is required.",
-    path: ["imageFile"], // Attach error to imageFile field for better UX
+    path: ["imageFile"],
 }).refine(data => !(data.imageUrl && data.imageFile), {
     message: "Please provide either an Image URL or upload an image, not both.",
     path: ["imageFile"],
@@ -92,11 +92,11 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
       title: initialData?.title || "",
       excerpt: initialData?.excerpt || "",
       content: initialData?.content || "",
-      topic: initialData?.topic || undefined, // Set initial topic
-      author: initialData?.author || "", // Will be replaced by auth user later
+      topic: initialData?.topic || undefined,
+      // Removed author field from defaultValues
       tags: initialData?.tags?.join(', ') || "",
       imageUrl: initialData?.imageUrl || "",
-      imageFile: null, // Start with no file selected
+      imageFile: null,
       imageAlt: initialData?.imageAlt || "",
     },
   });
@@ -110,21 +110,20 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
     if (file) {
       if (file.size > MAX_FILE_SIZE) {
           form.setError("imageFile", { type: "manual", message: `Max file size is 5MB.` });
-          setImagePreview(null); // Clear preview if file too large
-          form.setValue("imageFile", null); // Clear file value in form
+          setImagePreview(null);
+          form.setValue("imageFile", null);
           return;
        }
        if (!ACCEPTED_IMAGE_TYPES.includes(file.type)) {
           form.setError("imageFile", { type: "manual", message: "Only .jpg, .jpeg, .png, .webp and .gif formats are supported." });
-          setImagePreview(null); // Clear preview if wrong type
-          form.setValue("imageFile", null); // Clear file value in form
+          setImagePreview(null);
+          form.setValue("imageFile", null);
           return;
        }
 
-       // Clear URL field if a file is selected
        form.setValue("imageUrl", "");
        form.setValue("imageFile", file);
-       form.clearErrors("imageFile"); // Clear errors if file is valid
+       form.clearErrors("imageFile");
        form.clearErrors("imageUrl");
 
        const reader = new FileReader();
@@ -133,8 +132,6 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
        };
        reader.readAsDataURL(file);
     } else {
-        // Handle case where file selection is cancelled
-        // Only clear preview if there wasn't an initial URL
         if (!initialData?.imageUrl) {
              setImagePreview(null);
         }
@@ -145,32 +142,27 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
   const handleRemoveImage = useCallback(() => {
       setImagePreview(null);
       form.setValue("imageFile", null);
-      form.setValue("imageUrl", ""); // Also clear URL field
+      form.setValue("imageUrl", "");
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset file input
+        fileInputRef.current.value = "";
       }
       form.clearErrors("imageFile");
       form.clearErrors("imageUrl");
-      // Re-validate as image is now missing
       form.trigger(["imageFile", "imageUrl", "imageAlt"]);
   }, [form, initialData?.imageUrl]);
 
-   // Handle changes to the Image URL field
    const handleImageUrlChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const url = event.target.value;
         form.setValue("imageUrl", url);
         if (url) {
-            // Clear file field if URL is entered
             setImagePreview(url);
             form.setValue("imageFile", null);
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
             form.clearErrors("imageFile");
-            // Validate URL format
             form.trigger("imageUrl");
         } else {
-            // If URL is cleared, potentially show file preview if one exists
             const imageFile = form.getValues("imageFile");
             if (imageFile) {
                  const reader = new FileReader();
@@ -181,27 +173,21 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
             } else {
                setImagePreview(null);
             }
-            // Re-validate as URL is now empty
              form.trigger(["imageFile", "imageUrl", "imageAlt"]);
         }
     };
 
-   // Pre-process form data before submitting
    const processAndSubmit = (values: PostFormValues) => {
      console.log("Raw form values:", values);
 
-     // Ensure tags are processed correctly
+     // Removed author processing
      const processedValues = {
        ...values,
        tags: values.tags.split(',').map(tag => tag.trim()).filter(Boolean)
      };
 
      console.log("Processed form values:", processedValues);
-
-     // If imageFile is present, we'll handle its upload in the action
-     // If imageUrl is present, it's used directly
-
-     onSubmit(processedValues as any); // Pass processed data to the actual submit handler
+     onSubmit(processedValues as any);
    };
 
 
@@ -397,22 +383,8 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
                 )}
               />
 
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              {/* Author field will be removed/handled by auth later */}
-              {/* <FormField
-                control={form.control}
-                name="author"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Author (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Author's Name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              /> */}
-              <FormField
+            {/* Removed Author Field */}
+             <FormField
                 control={form.control}
                 name="tags"
                 render={({ field }) => (
@@ -428,9 +400,6 @@ export function PostForm({ initialData, onSubmit, isSubmitting, mode }: PostForm
                   </FormItem>
                 )}
               />
-            </div>
-
-
           </CardContent>
           <CardFooter>
              <Button type="submit" disabled={isSubmitting}>

@@ -1,3 +1,4 @@
+
 // src/app/admin/_components/delete-post-button.tsx
 "use client";
 
@@ -17,23 +18,35 @@ import {
 } from '@/components/ui/alert-dialog';
 import { Trash2, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { deletePostAction } from '../actions'; // We will create this action
+import { deletePostAction } from '../actions';
+// Optional: Import useAuth if you want client-side ownership check (less secure than server-side)
+// import { useAuth } from '@/context/auth-context';
 
 interface DeletePostButtonProps {
   slug: string;
   title: string;
+  // Optional: Pass authorUid if available for client-side check
+  // authorUid?: string;
 }
 
-export default function DeletePostButton({ slug, title }: DeletePostButtonProps) {
+export default function DeletePostButton({ slug, title /*, authorUid */ }: DeletePostButtonProps) {
   const router = useRouter();
   const { toast } = useToast();
+  // Optional: const { user } = useAuth();
   const [isDeleting, setIsDeleting] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   const handleDelete = async () => {
+    // Optional Client-Side Check (less secure, server action is the source of truth)
+    // if (authorUid && user?.uid !== authorUid) {
+    //   toast({ title: "Forbidden", description: "You cannot delete this post.", variant: "destructive" });
+    //   setIsOpen(false);
+    //   return;
+    // }
+
     setIsDeleting(true);
     try {
-      const result = await deletePostAction(slug);
+      const result = await deletePostAction(slug); // Server action handles auth check
       if (result.success) {
           toast({
             title: "Post Deleted",
@@ -41,7 +54,7 @@ export default function DeletePostButton({ slug, title }: DeletePostButtonProps)
           });
           setIsOpen(false); // Close the dialog
           // Refresh the page or specific data without a full reload
-          router.refresh();
+          router.refresh(); // Refresh the admin list
       } else {
          throw new Error(result.error || 'Failed to delete post');
       }
@@ -60,7 +73,8 @@ export default function DeletePostButton({ slug, title }: DeletePostButtonProps)
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="icon" title="Delete Post" disabled={isDeleting}>
+         {/* Optional: Disable button if client-side check fails */}
+        <Button variant="destructive" size="icon" title="Delete Post" disabled={isDeleting /* || (authorUid && user?.uid !== authorUid) */}>
           {isDeleting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
           <span className="sr-only">Delete</span>
         </Button>

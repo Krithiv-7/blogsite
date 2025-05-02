@@ -6,22 +6,22 @@ import { revalidatePath } from 'next/cache';
 import { createPost, updatePost, deletePost } from '@/lib/posts'; // Your data functions
 import type { BlogPost, BlogTopic } from '@/types';
 import { z } from 'zod';
-import { ALL_TOPICS } from '@/lib/topics'; // Import topic list for validation
+import { ALL_TOPICS } from '@/lib/topics';
+import { getAuthenticatedUser } from '@/lib/auth/server-actions-auth'; // Helper to get user server-side
 
 // Define Zod schema for input validation (matching the form)
 const postActionSchema = z.object({
   title: z.string().min(2),
   excerpt: z.string().min(10).max(200),
   content: z.string().min(20),
-  topic: z.enum(ALL_TOPICS, { required_error: "Topic is required." }), // Topic is required and includes 'gaming'
-  author: z.string().optional(), // Will be set server-side based on logged-in user
-  tags: z.string().min(1, { message: "At least one tag is required." }), // Tags required (as comma-separated string initially)
+  topic: z.enum(ALL_TOPICS, { required_error: "Topic is required." }),
+  tags: z.string().min(1, { message: "At least one tag is required." }),
   imageUrl: z.string().url().optional().or(z.literal('')),
-  imageFile: z.custom<File | null>().optional(), // Accept File object or null
+  imageFile: z.custom<File | null>().optional(),
   imageAlt: z.string().optional(),
 }).refine(data => !!data.imageUrl || !!data.imageFile, {
     message: "Either an Image URL or an uploaded image is required.",
-    path: ["imageFile"], // Attach error to imageFile for form display
+    path: ["imageFile"],
 }).refine(data => !(data.imageUrl && data.imageFile), {
     message: "Provide either an Image URL or upload an image, not both.",
     path: ["imageFile"],
@@ -33,22 +33,26 @@ const postActionSchema = z.object({
 
 // Helper to process tags string into array
 const processTags = (tagsString: string): string[] => {
-   // Now guaranteed to have a non-empty string by validation
    return tagsString.split(',').map(tag => tag.trim()).filter(Boolean);
 }
 
-// Placeholder for file upload logic (replace with actual storage solution)
+// Placeholder for file upload logic (replace with actual storage solution like Firebase Storage)
 async function handleImageUpload(imageFile: File | null | undefined): Promise<string | undefined> {
     if (!imageFile) return undefined;
 
     console.log(`Simulating upload for: ${imageFile.name}, size: ${imageFile.size}, type: ${imageFile.type}`);
     // In a real app:
-    // 1. Connect to your storage service (e.g., Firebase Storage, AWS S3, Cloudinary)
-    // 2. Generate a unique filename
-    // 3. Upload the file buffer/stream
-    // 4. Get the public URL of the uploaded file
-    // Example: const imageUrl = await uploadToFirebaseStorage(imageFile);
-    // return imageUrl;
+    // 1. Use Firebase Admin SDK (server-side) or Client SDK (if suitable) to interact with Firebase Storage.
+    // 2. Connect to your storage service (e.g., Firebase Storage)
+    // 3. Generate a unique filename (e.g., using user ID and timestamp)
+    // 4. Upload the file buffer/stream
+    // 5. Get the public URL of the uploaded file
+    // Example (conceptual):
+    // const storageRef = ref(storage, `posts/${user.uid}/${Date.now()}-${imageFile.name}`);
+    // const uploadTask = uploadBytesResumable(storageRef, imageFile);
+    // await uploadTask;
+    // const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+    // return downloadURL;
 
     // For now, return a placeholder URL based on the file name (NOT FOR PRODUCTION)
     await new Promise(resolve => setTimeout(resolve, 500)); // Simulate upload delay
@@ -60,7 +64,11 @@ async function handleImageUpload(imageFile: File | null | undefined): Promise<st
 
 // Action to create a new post
 export async function createPostAction(formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string | object }> {
-  // Validate input
+  const user = await getAuthenticatedUser();
+  if (!user) {
+    return { success: false, error: 'Authentication required.' };
+  }
+
   const validatedFields = postActionSchema.safeParse(formData);
 
   if (!validatedFields.success) {
@@ -68,40 +76,34 @@ export async function createPostAction(formData: unknown): Promise<{ success: bo
     return { success: false, error: validatedFields.error.flatten().fieldErrors };
   }
 
-  const { tags, imageFile, imageUrl: inputImageUrl, author: formAuthor, ...rest } = validatedFields.data;
-
-   // TODO: Get author from authenticated user session
-   const author = "Authenticated User"; // Replace with actual user data
+  const { tags, imageFile, imageUrl: inputImageUrl, ...rest } = validatedFields.data;
 
   try {
-    // Handle image: Upload file if present, otherwise use URL
     const uploadedImageUrl = await handleImageUpload(imageFile);
-    const finalImageUrl = uploadedImageUrl || inputImageUrl || undefined; // Prioritize uploaded image
+    const finalImageUrl = uploadedImageUrl || inputImageUrl || undefined;
 
     if (!finalImageUrl) {
-       // This case should ideally be caught by Zod refine, but double-check
        return { success: false, error: { imageFile: ["An image is required."] } };
     }
 
-
-    const postData = {
+    const postData: Omit<BlogPost, 'slug' | 'date'> = {
         ...rest,
-        author: author, // Set author from session/server
-        tags: processTags(tags), // Process tags string into array
-        imageUrl: finalImageUrl, // Use the determined image URL
-        imageAlt: rest.imageAlt || '', // Ensure alt text is present if image exists
+        authorUid: user.uid, // Set author UID from authenticated user
+        authorUsername: user.username || 'Unknown User', // Set username from authenticated user
+        tags: processTags(tags),
+        imageUrl: finalImageUrl,
+        imageAlt: rest.imageAlt || '',
         // topic is already validated and present in 'rest'
     };
 
-    const newPost = await createPost(postData as Omit<BlogPost, 'slug' | 'date'>); // Call your data layer function
-    revalidatePath('/'); // Revalidate homepage
-    revalidatePath('/admin'); // Revalidate admin page
-    revalidatePath(`/posts/${newPost.slug}`); // Revalidate the new post page
+    const newPost = await createPost(postData);
+    revalidatePath('/');
+    revalidatePath('/admin');
+    revalidatePath(`/posts/${newPost.slug}`);
     return { success: true, post: newPost };
   } catch (error: any) {
     console.error('Create Post Error:', error);
-    // Check if it's a validation error from deeper layers or a generic error
-    if (error.message.includes("Validation")) { // Basic check, refine as needed
+    if (error.message.includes("Validation")) {
          return { success: false, error: JSON.parse(error.message) };
     }
     return { success: false, error: error.message || 'Database error: Failed to create post.' };
@@ -110,50 +112,62 @@ export async function createPostAction(formData: unknown): Promise<{ success: bo
 
 // Action to update an existing post
 export async function updatePostAction(slug: string, formData: unknown): Promise<{ success: boolean; post?: BlogPost; error?: string | object }> {
-   // Validate input
-  const validatedFields = postActionSchema.safeParse(formData);
+   const user = await getAuthenticatedUser();
+   if (!user) {
+     return { success: false, error: 'Authentication required.' };
+   }
 
-  if (!validatedFields.success) {
-    console.error('Update Validation Error:', validatedFields.error.flatten().fieldErrors);
+   // Optional: Fetch post first to check ownership if needed
+   // const existingPost = await getPostBySlug(slug);
+   // if (existingPost && existingPost.authorUid !== user.uid) {
+   //    return { success: false, error: 'You do not have permission to edit this post.' };
+   // }
+
+   const validatedFields = postActionSchema.safeParse(formData);
+
+   if (!validatedFields.success) {
+     console.error('Update Validation Error:', validatedFields.error.flatten().fieldErrors);
      return { success: false, error: validatedFields.error.flatten().fieldErrors };
-  }
+   }
 
-   const { tags, imageFile, imageUrl: inputImageUrl, author: formAuthor, ...rest } = validatedFields.data;
-
-   // TODO: Get author from authenticated user session if needed for validation/logging
-   // const author = "Authenticated User";
+   const { tags, imageFile, imageUrl: inputImageUrl, ...rest } = validatedFields.data;
 
   try {
-    // Handle image update
     const uploadedImageUrl = await handleImageUpload(imageFile);
-    const finalImageUrl = uploadedImageUrl || inputImageUrl || undefined; // Prioritize uploaded image if a new one is provided
+    // Use existing image URL if no new image provided or uploaded
+    const finalImageUrl = uploadedImageUrl || inputImageUrl || undefined; // Add logic to fetch existing URL if needed
 
-     if (!finalImageUrl) {
-       // This case should ideally be caught by Zod refine, but double-check
+
+    if (!finalImageUrl) {
+      // If updating, we might need to fetch the existing post's URL if neither new URL nor file is provided
+      // This assumes the form logic correctly handles showing the existing image
+      // For now, we'll require an image source during update as well based on current schema
        return { success: false, error: { imageFile: ["An image is required."] } };
     }
 
-    const postData = {
-        ...rest,
-        tags: processTags(tags), // Process tags
-        imageUrl: finalImageUrl, // Use potentially updated image URL
+
+    // Prepare update data - only include fields that are part of the form schema
+    const updateData: Partial<Omit<BlogPost, 'slug' | 'date' | 'authorUid' | 'authorUsername'>> = {
+        title: rest.title,
+        excerpt: rest.excerpt,
+        content: rest.content,
+        topic: rest.topic,
+        tags: processTags(tags),
+        imageUrl: finalImageUrl,
         imageAlt: rest.imageAlt || '',
-        // author: author, // Usually author doesn't change, but update if needed
-        // topic is validated and in 'rest'
     };
 
-
-    const updatedPost = await updatePost(slug, postData as Partial<BlogPost>); // Call your data layer function
+    // Pass only the updateData to the update function
+    const updatedPost = await updatePost(slug, updateData);
     if (!updatedPost) {
-      return { success: false, error: 'Post not found.' };
+      return { success: false, error: 'Post not found or update failed.' };
     }
-    revalidatePath('/'); // Revalidate homepage
-    revalidatePath('/admin'); // Revalidate admin page
-    revalidatePath(`/posts/${slug}`); // Revalidate the updated post page
+    revalidatePath('/');
+    revalidatePath('/admin');
+    revalidatePath(`/posts/${slug}`);
     return { success: true, post: updatedPost };
-  } catch (error: any) {
-     console.error('Update Post Error:', error);
-      if (error.message.includes("Validation")) { // Basic check, refine as needed
+  } catch (error: any)     console.error('Update Post Error:', error);
+      if (error.message.includes("Validation")) {
          return { success: false, error: JSON.parse(error.message) };
       }
     return { success: false, error: error.message || 'Database error: Failed to update post.' };
@@ -162,26 +176,37 @@ export async function updatePostAction(slug: string, formData: unknown): Promise
 
 // Action to delete a post
 export async function deletePostAction(slug: string): Promise<{ success: boolean; error?: string }> {
+  const user = await getAuthenticatedUser();
+   if (!user) {
+     return { success: false, error: 'Authentication required.' };
+   }
+
   if (!slug) {
      return { success: false, error: 'Invalid slug provided.' };
   }
 
-   // TODO: Add permission check - ensure the current user owns this post or has delete rights
+   // Optional: Add permission check - ensure the current user owns this post
+   // const post = await getPostBySlug(slug);
+   // if (!post) {
+   //    return { success: false, error: 'Post not found.' };
+   // }
+   // if (post.authorUid !== user.uid) {
+   //    return { success: false, error: 'You do not have permission to delete this post.' };
+   // }
+
+   // Optional: Delete associated image from storage
+   // if (post?.imageUrl && post.imageUrl.startsWith('https://firebasestorage.googleapis.com/')) { // Check if it's a Firebase Storage URL
+   //    await deleteImageFromFirebaseStorage(post.imageUrl); // Implement this function using Admin SDK
+   // }
+
 
   try {
-    // Optional: Delete associated image from storage before deleting post data
-    // const post = await getPostBySlug(slug); // Fetch post to get image URL if needed
-    // if (post?.imageUrl) {
-    //    await deleteImageFromStorage(post.imageUrl); // Implement this function
-    // }
-
     const success = await deletePost(slug); // Call your data layer function
     if (!success) {
       return { success: false, error: 'Post not found or already deleted.' };
     }
-    revalidatePath('/'); // Revalidate homepage
-    revalidatePath('/admin'); // Revalidate admin page
-    // No need to revalidate the specific post page as it's gone
+    revalidatePath('/');
+    revalidatePath('/admin');
     return { success: true };
   } catch (error: any) {
      console.error('Delete Post Error:', error);

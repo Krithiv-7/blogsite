@@ -1,10 +1,12 @@
+
 import type { Metadata } from 'next';
 import { Inter, Lora, Inconsolata } from 'next/font/google'; // Added Lora and Inconsolata
 import './globals.css';
 import { Header } from '@/components/header';
 import { Footer } from '@/components/footer';
 import { Toaster } from '@/components/ui/toaster';
-import { ThemeProvider } from '@/components/theme-provider'; // Import ThemeProvider
+import { ThemeProvider } from '@/components/theme-provider';
+import { AuthProvider } from '@/context/auth-context'; // Import AuthProvider
 
 // Define fonts
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
@@ -32,12 +34,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Header />
-          <main className="container mx-auto flex-grow px-4 py-8 md:px-6">
-            {children}
-          </main>
-          <Footer />
-          <Toaster />
+           <AuthProvider> {/* Wrap content with AuthProvider */}
+              <Header />
+              <main className="container mx-auto flex-grow px-4 py-8 md:px-6">
+                {children}
+              </main>
+              <Footer />
+              <Toaster />
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

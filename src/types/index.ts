@@ -12,8 +12,11 @@ export interface BlogPost {
   topic: BlogTopic; // Make topic required
   tags: string[]; // Make tags required
 
+  // Author info (now required)
+  authorUid: string; // Firebase User ID
+  authorUsername: string; // User's chosen display name
+
   // Optional fields
-  author?: string;
   imageUrl?: string; // Keep as optional URL string
   imageFile?: File | null; // Optional File object for upload
   imageAlt?: string;
@@ -26,3 +29,9 @@ export interface TopicConfig {
     className: string; // Class to apply to body/container
 }
 
+// Add User type for authentication context
+export interface User {
+  uid: string;
+  email: string | null;
+  username: string | null; // Changed from displayName to username
+}

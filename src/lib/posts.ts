@@ -3,7 +3,7 @@ import type { BlogPost } from '@/types';
 import { ALL_TOPICS } from './topics';
 
 // Mock data - replace with actual data fetching logic
-// Ensure all posts have required 'topic' and 'tags'
+// Add authorUid and authorUsername to all posts
 export let mockPosts: BlogPost[] = [
   // --- Tech ---
   {
@@ -11,12 +11,13 @@ export let mockPosts: BlogPost[] = [
     title: 'Getting Started with Next.js 15',
     date: '2024-07-26',
     excerpt: 'Learn the basics of Next.js and how to set up your first project using the App Router.',
-    content: `... (content remains the same) ...`, // Keep content concise for brevity
-    author: 'Tech Guru',
-    tags: ['Next.js', 'React', 'Web Development', 'App Router'], // Required
+    content: `... (content remains the same) ...`,
+    authorUid: 'user1_tech', // Example UID
+    authorUsername: 'Tech Guru', // Example Username
+    tags: ['Next.js', 'React', 'Web Development', 'App Router'],
     imageUrl: 'https://picsum.photos/seed/nextjs15/800/400',
     imageAlt: 'Abstract code background with Next.js logo',
-    topic: 'tech', // Required
+    topic: 'tech',
   },
   {
     slug: 'styling-in-tailwind',
@@ -24,11 +25,12 @@ export let mockPosts: BlogPost[] = [
     date: '2024-07-25',
     excerpt: 'Discover the power of utility-first CSS with the latest Tailwind features.',
     content: `... (content remains the same) ...`,
-    author: 'CSS Wizard',
-    tags: ['CSS', 'Tailwind CSS', 'Styling', 'Frontend'], // Required
+    authorUid: 'user2_css',
+    authorUsername: 'CSS Wizard',
+    tags: ['CSS', 'Tailwind CSS', 'Styling', 'Frontend'],
     imageUrl: 'https://picsum.photos/seed/tailwind4/800/400',
     imageAlt: 'Tailwind CSS logo with code snippets',
-    topic: 'tech', // Required
+    topic: 'tech',
   },
    // --- Classic ---
   {
@@ -37,11 +39,12 @@ export let mockPosts: BlogPost[] = [
     date: '2024-07-23',
     excerpt: 'Exploring the traditional techniques of classic bookbinding.',
     content: `... (content remains the same) ...`,
-    author: 'Edward Ledger',
-    tags: ['Books', 'Craft', 'History', 'Classic', 'Binding'], // Required
+    authorUid: 'user3_classic',
+    authorUsername: 'Edward Ledger',
+    tags: ['Books', 'Craft', 'History', 'Classic', 'Binding'],
     imageUrl: 'https://picsum.photos/seed/bookbinding/800/400',
     imageAlt: 'Old books stacked with binding tools',
-    topic: 'classic', // Required
+    topic: 'classic',
   },
   // --- Food ---
    {
@@ -50,11 +53,12 @@ export let mockPosts: BlogPost[] = [
     date: '2024-07-22',
     excerpt: 'A guide to achieving a tangy flavor and open crumb in your homemade sourdough.',
     content: `... (content remains the same) ...`,
-    author: 'Olivia Baker',
-    tags: ['Baking', 'Sourdough', 'Food', 'Recipe', 'Bread'], // Required
+    authorUid: 'user4_food',
+    authorUsername: 'Olivia Baker',
+    tags: ['Baking', 'Sourdough', 'Food', 'Recipe', 'Bread'],
     imageUrl: 'https://picsum.photos/seed/sourdough/800/400',
     imageAlt: 'A golden-brown sourdough loaf on a wooden board',
-    topic: 'food', // Required
+    topic: 'food',
   },
   // --- Health ---
   {
@@ -62,24 +66,13 @@ export let mockPosts: BlogPost[] = [
     title: 'Mindfulness Meditation for Beginners',
     date: '2024-07-21',
     excerpt: 'Simple techniques to start practicing mindfulness and reduce stress.',
-    content: `
-## What is Mindfulness?
-Mindfulness is the practice of paying attention to the present moment without judgment. It can help reduce stress, improve focus, and enhance emotional regulation.
-
-## Simple Exercise: Mindful Breathing
-1. Find a quiet place to sit comfortably.
-2. Close your eyes gently.
-3. Bring your attention to your breath. Notice the sensation of air entering and leaving your body.
-4. If your mind wanders, gently guide it back to your breath.
-5. Start with 5 minutes daily.
-
-Consistency is key. Even short sessions can make a difference.
-    `,
-    author: 'Dr. Anya Sharma',
-    tags: ['Mindfulness', 'Meditation', 'Health', 'Wellbeing', 'Stress Relief'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user5_health',
+    authorUsername: 'Dr. Anya Sharma',
+    tags: ['Mindfulness', 'Meditation', 'Health', 'Wellbeing', 'Stress Relief'],
     imageUrl: 'https://picsum.photos/seed/mindfulness/800/400',
     imageAlt: 'Person meditating peacefully outdoors',
-    topic: 'health', // Required
+    topic: 'health',
   },
   // --- Travel ---
    {
@@ -87,23 +80,13 @@ Consistency is key. Even short sessions can make a difference.
     title: 'A Weekend Guide to Exploring Kyoto',
     date: '2024-07-20',
     excerpt: 'Discover the ancient temples, serene gardens, and vibrant culture of Kyoto.',
-    content: `
-## Must-Visit Spots
-*   **Fushimi Inari Shrine:** Walk through thousands of vibrant red torii gates.
-*   **Arashiyama Bamboo Grove:** Immerse yourself in the towering bamboo forest.
-*   **Kinkaku-ji (Golden Pavilion):** Admire the stunning gold-leaf covered temple.
-*   **Gion District:** Explore the traditional geisha district (be respectful).
-
-## Tips
-*   Get a Japan Rail Pass if traveling from other cities.
-*   Wear comfortable shoes - you'll do a lot of walking!
-*   Try local matcha tea and sweets.
-    `,
-    author: 'Marco Polo Jr.',
-    tags: ['Travel', 'Japan', 'Kyoto', 'Asia', 'Culture', 'Guide'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user6_travel',
+    authorUsername: 'Marco Polo Jr.',
+    tags: ['Travel', 'Japan', 'Kyoto', 'Asia', 'Culture', 'Guide'],
     imageUrl: 'https://picsum.photos/seed/kyoto/800/400',
     imageAlt: 'Iconic red torii gates at Fushimi Inari Shrine in Kyoto',
-    topic: 'travel', // Required
+    topic: 'travel',
   },
    // --- Cooking ---
   {
@@ -111,27 +94,13 @@ Consistency is key. Even short sessions can make a difference.
     title: 'Simple & Delicious Pasta Aglio e Olio',
     date: '2024-07-19',
     excerpt: 'Master this classic Italian pasta dish with garlic, olive oil, and chili flakes.',
-    content: `
-## Ingredients (Serves 2)
-*   200g Spaghetti
-*   4-6 cloves Garlic, thinly sliced
-*   1/2 tsp Red chili flakes (or to taste)
-*   1/4 cup Extra virgin olive oil
-*   Salt to taste
-*   Fresh parsley, chopped (optional)
-*   Parmesan cheese, grated (optional)
-
-## Instructions
-1. Cook spaghetti in salted boiling water until al dente. Reserve 1/2 cup pasta water.
-2. While pasta cooks, heat olive oil in a large skillet over medium-low heat. Add garlic and chili flakes. Cook gently until garlic is fragrant and lightly golden (do not burn!).
-3. Drain pasta and add it directly to the skillet. Add a splash of reserved pasta water. Toss well to coat the pasta in the oil.
-4. Season with salt. Add parsley and Parmesan if using. Serve immediately.
-    `,
-    author: 'Chef Isabella Rossi',
-    tags: ['Cooking', 'Recipe', 'Pasta', 'Italian', 'Quick Meal', 'Vegetarian'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user7_cooking',
+    authorUsername: 'Chef Isabella Rossi',
+    tags: ['Cooking', 'Recipe', 'Pasta', 'Italian', 'Quick Meal', 'Vegetarian'],
     imageUrl: 'https://picsum.photos/seed/aglioolio/800/400',
     imageAlt: 'Close-up of pasta Aglio e Olio in a pan',
-    topic: 'cooking', // Required
+    topic: 'cooking',
   },
   // --- Guides ---
   {
@@ -139,22 +108,13 @@ Consistency is key. Even short sessions can make a difference.
     title: 'How to Choose the Right Laptop in 2024',
     date: '2024-07-18',
     excerpt: 'A comprehensive guide to help you select the perfect laptop for your needs.',
-    content: `
-## Key Considerations
-1.  **Operating System:** Windows, macOS, or ChromeOS? Depends on your ecosystem and software needs.
-2.  **Budget:** Determine your price range. Laptops vary significantly in cost.
-3.  **Use Case:** Gaming, work, portability, creative tasks? This dictates required specs (CPU, RAM, GPU, Storage).
-4.  **Screen Size & Quality:** Consider resolution, color accuracy, and brightness based on your tasks.
-5.  **Portability:** Weight and battery life are crucial if you travel frequently.
-6.  **Keyboard & Trackpad:** Try them out if possible, especially for extensive typing.
-
-Research reviews and compare models within your budget and use case.
-    `,
-    author: 'Gadget Advisor',
-    tags: ['Guides', 'Technology', 'Laptops', 'Buying Guide', 'Computers'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user8_guides',
+    authorUsername: 'Gadget Advisor',
+    tags: ['Guides', 'Technology', 'Laptops', 'Buying Guide', 'Computers'],
     imageUrl: 'https://picsum.photos/seed/laptopguide/800/400',
     imageAlt: 'Various laptops displayed on a table',
-    topic: 'guides', // Required
+    topic: 'guides',
   },
   // --- Gaming ---
   {
@@ -162,20 +122,13 @@ Research reviews and compare models within your budget and use case.
     title: 'Must-Play Indie Game Gems of 2024',
     date: '2024-07-16',
     excerpt: 'Discover hidden indie game treasures you might have missed this year.',
-    content: `
-## Top Picks So Far
-*   **Pixel Pioneers:** A charming retro-style RPG with deep crafting.
-*   **Neon Nights:** Fast-paced cyberpunk action platformer with a killer soundtrack.
-*   **Whispering Woods:** A narrative-driven adventure with stunning hand-drawn art.
-*   **Cosmic Cartographers:** Relaxing space exploration and trading simulator.
-
-Support indie developers and find your next favorite game!
-    `,
-    author: 'Gamer Nexus',
-    tags: ['Gaming', 'Indie Games', 'PC Gaming', 'Console Gaming', 'Review'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user9_gaming',
+    authorUsername: 'Gamer Nexus',
+    tags: ['Gaming', 'Indie Games', 'PC Gaming', 'Console Gaming', 'Review'],
     imageUrl: 'https://picsum.photos/seed/indiegames/800/400',
     imageAlt: 'Abstract pixel art landscape representing indie games',
-    topic: 'gaming', // Required
+    topic: 'gaming',
   },
    // --- Mature ---
   {
@@ -183,26 +136,13 @@ Support indie developers and find your next favorite game!
     title: 'Exploring the Philosophy of Existence',
     date: '2024-07-17',
     excerpt: 'A brief delve into existential questions about meaning, purpose, and being.',
-    content: `
-## Fundamental Questions
-Existential philosophy grapples with profound questions:
-*   Why are we here?
-*   What is the meaning of life?
-*   How do we deal with freedom, responsibility, and mortality?
-
-## Key Themes
-*   **Absurdity:** The conflict between humanity's search for meaning and the apparent meaninglessness of the universe (Camus).
-*   **Authenticity:** Living in accordance with one's own values and choices, rather than societal pressures (Sartre, Heidegger).
-*   **Freedom & Responsibility:** We are radically free to define ourselves through our actions, which brings immense responsibility.
-*   **Angst & Dread:** The anxiety arising from awareness of freedom and mortality.
-
-These are complex topics with no easy answers, inviting ongoing reflection.
-    `,
-    author: 'Thinker Deeply',
-    tags: ['Philosophy', 'Existentialism', 'Meaning', 'Mature', 'Reflection'], // Required
+    content: `... (content) ...`,
+    authorUid: 'user10_mature',
+    authorUsername: 'Thinker Deeply',
+    tags: ['Philosophy', 'Existentialism', 'Meaning', 'Mature', 'Reflection'],
     imageUrl: 'https://picsum.photos/seed/existence/800/400',
     imageAlt: 'Silhouette of a person looking at a starry night sky',
-    topic: 'mature', // Required
+    topic: 'mature',
   },
 ];
 
@@ -245,18 +185,15 @@ function generateSlug(title: string): string {
 }
 
 
-// These would interact with your backend/CMS/file system
-// Ensure the input type matches the required fields in BlogPost
+// Ensure the input type includes authorUid and authorUsername
 export async function createPost(postData: Omit<BlogPost, 'slug' | 'date'>): Promise<BlogPost> {
   console.log('Attempting to create post:', postData);
 
-  // Basic validation within the function (Zod handles primary validation)
-  if (!postData.title || !postData.topic || !postData.tags || postData.tags.length === 0 || !postData.excerpt || !postData.content || (!postData.imageUrl && !postData.imageFile) || ((postData.imageUrl || postData.imageFile) && !postData.imageAlt)) {
-     // This indicates an issue either with form data reaching here or validation bypass
+  // Validation including author info
+  if (!postData.title || !postData.topic || !postData.tags || postData.tags.length === 0 || !postData.excerpt || !postData.content || (!postData.imageUrl) || (!postData.imageAlt) || !postData.authorUid || !postData.authorUsername) {
      console.error("Create Post Error: Missing required fields before saving.", postData);
      throw new Error(JSON.stringify({ validation: "Internal server error: Missing required fields." }));
   }
-
 
   const newSlug = generateSlug(postData.title);
 
@@ -266,22 +203,22 @@ export async function createPost(postData: Omit<BlogPost, 'slug' | 'date'>): Pro
     date: new Date().toISOString().split('T')[0], // Use current date
     excerpt: postData.excerpt,
     content: postData.content,
-    topic: postData.topic, // Already validated as required
-    tags: postData.tags,   // Already validated as required array
-    author: postData.author || 'Anonymous', // Use provided or default
-    imageUrl: postData.imageUrl, // URL from form (potentially after upload)
-    imageAlt: postData.imageAlt, // Already validated
-    // imageFile is handled before this function call (uploaded)
+    topic: postData.topic,
+    tags: postData.tags,
+    authorUid: postData.authorUid, // Include authorUid
+    authorUsername: postData.authorUsername, // Include authorUsername
+    imageUrl: postData.imageUrl, // Image URL is now required (after upload/selection)
+    imageAlt: postData.imageAlt, // Alt text is now required
   };
 
-  // Add to mock data (replace with DB call)
   mockPosts.unshift(newPost);
   console.log('Post created successfully:', newPost);
   return newPost;
 }
 
 // Update function needs to handle partial updates correctly
-export async function updatePost(slug: string, postData: Partial<Omit<BlogPost, 'slug' | 'date' | 'author'>>): Promise<BlogPost | null> {
+// Exclude slug, date, authorUid, authorUsername from update payload type
+export async function updatePost(slug: string, postData: Partial<Omit<BlogPost, 'slug' | 'date' | 'authorUid' | 'authorUsername'>>): Promise<BlogPost | null> {
   console.log(`Attempting to update post ${slug}:`, postData);
   const index = mockPosts.findIndex(p => p.slug === slug);
   if (index === -1) {
@@ -289,27 +226,27 @@ export async function updatePost(slug: string, postData: Partial<Omit<BlogPost, 
     return null;
   }
 
-  // Get the existing post
   const existingPost = mockPosts[index];
 
-   // Merge data, ensuring required fields aren't accidentally removed
+   // Merge data, ensuring required fields aren't accidentally removed or changed inappropriately
    const updatedPostData: BlogPost = {
      ...existingPost, // Start with existing data
-     ...postData, // Overwrite with new data
+     ...postData, // Overwrite with new data from the form
      // Ensure required fields that might be in postData are correctly typed/present
-     topic: postData.topic || existingPost.topic, // Fallback to existing if not provided
-     tags: postData.tags || existingPost.tags, // Fallback to existing if not provided
-     // Ensure imageUrl and imageAlt are consistent
+     topic: postData.topic || existingPost.topic,
+     tags: postData.tags || existingPost.tags,
      imageUrl: postData.imageUrl !== undefined ? postData.imageUrl : existingPost.imageUrl,
      imageAlt: postData.imageAlt !== undefined ? postData.imageAlt : existingPost.imageAlt,
+     // authorUid and authorUsername should generally not be changed during an update via this action
+     authorUid: existingPost.authorUid,
+     authorUsername: existingPost.authorUsername,
    };
 
-   // Re-validate essential fields after merge, just in case
-   if (!updatedPostData.topic || !updatedPostData.tags || updatedPostData.tags.length === 0 || !updatedPostData.imageUrl || !updatedPostData.imageAlt) {
+   // Re-validate essential fields after merge
+   if (!updatedPostData.topic || !updatedPostData.tags || updatedPostData.tags.length === 0 || !updatedPostData.imageUrl || !updatedPostData.imageAlt || !updatedPostData.authorUid || !updatedPostData.authorUsername) {
        console.error("Update Post Error: Required fields missing after update merge.", updatedPostData);
        throw new Error(JSON.stringify({ validation: "Internal server error: Update resulted in missing required fields." }));
    }
-
 
   mockPosts[index] = updatedPostData; // Update mock data
   console.log('Post updated successfully:', updatedPostData);

@@ -1,3 +1,4 @@
+
 import { getPostBySlug, getAllPosts } from '@/lib/posts';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
@@ -52,7 +53,8 @@ export default async function PostPage({ params }: { params: { slug: string } })
            {post.title}
          </h1>
          <p className="text-base text-muted-foreground">
-           Posted on {format(new Date(post.date), 'PPP')} {post.author && `by ${post.author}`}
+            {/* Display authorUsername */}
+           Posted on {format(new Date(post.date), 'PPP')} {post.authorUsername && `by ${post.authorUsername}`}
          </p>
 
          {post.tags && post.tags.length > 0 && (

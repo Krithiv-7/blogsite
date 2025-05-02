@@ -17,7 +17,7 @@ export default function Home() {
   const [allPosts, setAllPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [selectedTopic, setSelectedTopic] = useState<BlogTopic | 'all'>('tech'); // Default to 'tech' or derive from initial class
+  const [selectedTopic, setSelectedTopic] = useState<BlogTopic>('tech'); // Default to 'tech' or derive from initial class
 
   // Fetch all posts initially
   useEffect(() => {
@@ -158,7 +158,8 @@ export default function Home() {
                     </Link>
                     </CardTitle>
                     <CardDescription>
-                    {format(new Date(post.date), 'PPP')} {post.author && `by ${post.author}`}
+                        {/* Display authorUsername */}
+                       {format(new Date(post.date), 'PPP')} {post.authorUsername && `by ${post.authorUsername}`}
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="flex-grow">
