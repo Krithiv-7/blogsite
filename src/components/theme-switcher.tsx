@@ -31,7 +31,7 @@ import type { BlogTopic } from "@/types";
 const MATURE_CONSENT_KEY = "mature_content_consent";
 
 export function ThemeSwitcher() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme } = useTheme() // Removed resolvedTheme as it's not directly used now
   const [mounted, setMounted] = React.useState(false)
   const [activeTopic, setActiveTopic] = React.useState<BlogTopic>('tech');
   const [pendingTopic, setPendingTopic] = React.useState<BlogTopic | null>(null);
@@ -53,7 +53,9 @@ export function ThemeSwitcher() {
                break;
            }
         }
-        setActiveTopic(currentTopic);
+       // Only update if the topic derived from class is different
+       // Prevents unnecessary re-renders if multiple classes change but topic doesn't
+       setActiveTopic(prev => (prev !== currentTopic ? currentTopic : prev));
     }
 
     updateActiveTopicFromClass(); // Initial check
@@ -62,7 +64,7 @@ export function ThemeSwitcher() {
          for (const mutation of mutations) {
             if (mutation.attributeName === 'class') {
                  updateActiveTopicFromClass();
-                 break;
+                 break; // Only need to update once per mutation batch
             }
          }
     });
@@ -77,6 +79,7 @@ export function ThemeSwitcher() {
 
   const applyThemeClass = (topicKey: BlogTopic) => {
     const body = document.body;
+    // Remove only topic-specific classes
     Object.values(TOPICS).forEach(config => {
       if (config.className) {
         body.classList.remove(config.className);
@@ -87,11 +90,13 @@ export function ThemeSwitcher() {
     if (newTopicConfig?.className) {
       body.classList.add(newTopicConfig.className);
     }
-    setActiveTopic(topicKey);
+    // State update is handled by the observer now, no need to setActiveTopic here directly
+    // setActiveTopic(topicKey); // Removed direct state update here
   }
 
   const handleTopicChange = (value: string) => {
     const newTopicKey = value as BlogTopic;
+    // Prevent applying the same class again unnecessarily
     if (newTopicKey === activeTopic) return;
 
     if (newTopicKey === 'mature' && !hasMatureConsent) {
@@ -99,6 +104,8 @@ export function ThemeSwitcher() {
         setShowMatureConfirm(true);
     } else {
         applyThemeClass(newTopicKey);
+        // Ensure the radio group visually updates immediately if needed, though observer should catch it
+        setActiveTopic(newTopicKey);
     }
   };
 
@@ -108,6 +115,8 @@ export function ThemeSwitcher() {
           // Store consent in localStorage
           localStorage.setItem(MATURE_CONSENT_KEY, 'true');
           setHasMatureConsent(true); // Update state
+           // Ensure the radio group visually updates immediately if needed
+          setActiveTopic('mature');
       }
       setShowMatureConfirm(false);
       setPendingTopic(null);
@@ -121,43 +130,46 @@ export function ThemeSwitcher() {
 
   if (!mounted) {
     // Render a placeholder or null during server-side rendering and initial mount
+    // Provide placeholders for both buttons
     return (
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1">
          <Button variant="ghost" size="icon" disabled>
            <Sun className="h-[1.2rem] w-[1.2rem]" />
          </Button>
          <Button variant="ghost" size="icon" disabled>
-            <Monitor className="h-[1.2rem] w-[1.2rem]" />
+            <Monitor className="h-[1.2rem] w-[1.2rem]" /> {/* Placeholder icon */}
          </Button>
       </div>
     );
   }
 
-  const CurrentTopicIcon = TOPICS[activeTopic]?.icon || Monitor; // Fallback icon
+  const CurrentTopicIcon = TOPICS[activeTopic]?.icon || Monitor; // Fallback icon if topic somehow invalid
 
   return (
     <>
-       <div className="flex items-center gap-1">
-         {/* Light/Dark Toggle */}
-         <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" title={`Change Appearance (${theme})`}>
-                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-                <span className="sr-only">Toggle theme appearance</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Appearance</DropdownMenuLabel>
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                <Sun className="mr-2 h-4 w-4" /> Light
-              </DropdownMenuItem>
-              {/* Removed Dark option */}
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                 <Monitor className="mr-2 h-4 w-4" /> System
-               </DropdownMenuItem>
-            </DropdownMenuContent>
-         </DropdownMenu>
+      <div className="flex items-center gap-1">
+        {/* Light/Dark/System Toggle */}
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="icon" title={`Change Appearance (${theme})`}>
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme appearance</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              <Sun className="mr-2 h-4 w-4" /> Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}> {/* Re-added Dark explicitly */}
+              <Moon className="mr-2 h-4 w-4" /> Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              <Monitor className="mr-2 h-4 w-4" /> System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         {/* Topic Style Dropdown */}
         <DropdownMenu>
@@ -182,7 +194,7 @@ export function ThemeSwitcher() {
               </DropdownMenuRadioGroup>
             </DropdownMenuContent>
         </DropdownMenu>
-     </div>
+      </div>
 
       {/* Mature Content Confirmation Dialog */}
       <AlertDialog open={showMatureConfirm} onOpenChange={setShowMatureConfirm}>
