@@ -9,6 +9,11 @@ export default {
   ],
   theme: {
   	extend: {
+        fontFamily: {
+            sans: ['var(--font-sans)'],
+            serif: ['var(--font-serif)'],
+            mono: ['var(--font-mono)'],
+        },
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
@@ -92,38 +97,62 @@ export default {
         typography: ({ theme }: { theme: (path: string) => string }) => ({
           DEFAULT: {
             css: {
-              '--tw-prose-body': theme('colors.foreground / 0.9'),
-              '--tw-prose-headings': theme('colors.foreground'),
-              '--tw-prose-lead': theme('colors.muted.foreground'),
-              '--tw-prose-links': theme('colors.primary.DEFAULT'),
-              '--tw-prose-bold': theme('colors.foreground'),
-              '--tw-prose-counters': theme('colors.muted.foreground'),
-              '--tw-prose-bullets': theme('colors.border'),
-              '--tw-prose-hr': theme('colors.border'),
-              '--tw-prose-quotes': theme('colors.foreground'),
-              '--tw-prose-quote-borders': theme('colors.border'),
-              '--tw-prose-captions': theme('colors.muted.foreground'),
-              '--tw-prose-code': theme('colors.foreground'),
-              '--tw-prose-pre-code': theme('colors.foreground'), // Code block text
-              '--tw-prose-pre-bg': theme('colors.muted.DEFAULT'), // Code block background
-              '--tw-prose-th-borders': theme('colors.border'),
-              '--tw-prose-td-borders': theme('colors.border'),
-              '--tw-prose-invert-body': theme('colors.foreground'),
-              '--tw-prose-invert-headings': theme('colors.foreground'),
-              '--tw-prose-invert-lead': theme('colors.muted.foreground'),
-              '--tw-prose-invert-links': theme('colors.primary.DEFAULT'),
-              '--tw-prose-invert-bold': theme('colors.foreground'),
-              '--tw-prose-invert-counters': theme('colors.muted.foreground'),
-              '--tw-prose-invert-bullets': theme('colors.border'),
-              '--tw-prose-invert-hr': theme('colors.border'),
-              '--tw-prose-invert-quotes': theme('colors.foreground'),
-              '--tw-prose-invert-quote-borders': theme('colors.border'),
-              '--tw-prose-invert-captions': theme('colors.muted.foreground'),
-              '--tw-prose-invert-code': theme('colors.foreground'),
-              '--tw-prose-invert-pre-code': theme('colors.foreground'), // Dark mode code block text
-              '--tw-prose-invert-pre-bg': theme('colors.secondary.DEFAULT'), // Dark mode code block background
-              '--tw-prose-invert-th-borders': theme('colors.border'),
-              '--tw-prose-invert-td-borders': theme('colors.border'),
+              '--tw-prose-body': 'hsl(var(--foreground))',
+              '--tw-prose-headings': 'hsl(var(--foreground))',
+              '--tw-prose-lead': 'hsl(var(--muted-foreground))',
+              '--tw-prose-links': 'hsl(var(--primary))',
+              '--tw-prose-bold': 'hsl(var(--foreground))',
+              '--tw-prose-counters': 'hsl(var(--muted-foreground))',
+              '--tw-prose-bullets': 'hsl(var(--border))',
+              '--tw-prose-hr': 'hsl(var(--border))',
+              '--tw-prose-quotes': 'hsl(var(--foreground))',
+              '--tw-prose-quote-borders': 'hsl(var(--border))',
+              '--tw-prose-captions': 'hsl(var(--muted-foreground))',
+              '--tw-prose-code': 'hsl(var(--foreground))',
+              '--tw-prose-pre-code': 'hsl(var(--muted-foreground))', // Use muted-foreground for code text
+              '--tw-prose-pre-bg': 'hsl(var(--muted))', // Code block background
+              '--tw-prose-th-borders': 'hsl(var(--border))',
+              '--tw-prose-td-borders': 'hsl(var(--border))',
+
+              // // Invert colors are automatically handled by the typography plugin's dark modifier,
+              // // but we ensure they use our CSS variables.
+              // '--tw-prose-invert-body': 'hsl(var(--foreground))',
+              // '--tw-prose-invert-headings': 'hsl(var(--foreground))',
+              // '--tw-prose-invert-lead': 'hsl(var(--muted-foreground))',
+              // '--tw-prose-invert-links': 'hsl(var(--primary))',
+              // '--tw-prose-invert-bold': 'hsl(var(--foreground))',
+              // '--tw-prose-invert-counters': 'hsl(var(--muted-foreground))',
+              // '--tw-prose-invert-bullets': 'hsl(var(--border))',
+              // '--tw-prose-invert-hr': 'hsl(var(--border))',
+              // '--tw-prose-invert-quotes': 'hsl(var(--foreground))',
+              // '--tw-prose-invert-quote-borders': 'hsl(var(--border))',
+              // '--tw-prose-invert-captions': 'hsl(var(--muted-foreground))',
+              // '--tw-prose-invert-code': 'hsl(var(--foreground))',
+              // '--tw-prose-invert-pre-code': 'hsl(var(--secondary-foreground))', // Dark mode code block text
+              // '--tw-prose-invert-pre-bg': 'hsl(var(--secondary))', // Dark mode code block background
+              // '--tw-prose-invert-th-borders': 'hsl(var(--border))',
+              // '--tw-prose-invert-td-borders': 'hsl(var(--border))',
+            },
+          },
+           // Ensure dark mode typography uses the correct variables
+           dark: {
+             css: {
+              '--tw-prose-body': 'hsl(var(--foreground))',
+              '--tw-prose-headings': 'hsl(var(--foreground))',
+              '--tw-prose-lead': 'hsl(var(--muted-foreground))',
+              '--tw-prose-links': 'hsl(var(--primary))',
+              '--tw-prose-bold': 'hsl(var(--foreground))',
+              '--tw-prose-counters': 'hsl(var(--muted-foreground))',
+              '--tw-prose-bullets': 'hsl(var(--border))',
+              '--tw-prose-hr': 'hsl(var(--border))',
+              '--tw-prose-quotes': 'hsl(var(--foreground))',
+              '--tw-prose-quote-borders': 'hsl(var(--border))',
+              '--tw-prose-captions': 'hsl(var(--muted-foreground))',
+              '--tw-prose-code': 'hsl(var(--foreground))',
+              '--tw-prose-pre-code': 'hsl(var(--secondary-foreground))',
+              '--tw-prose-pre-bg': 'hsl(var(--secondary))',
+              '--tw-prose-th-borders': 'hsl(var(--border))',
+              '--tw-prose-td-borders': 'hsl(var(--border))',
             },
           },
         }),
